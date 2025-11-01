@@ -199,11 +199,16 @@
             color: white;
         }
 
-        /* Thêm style cho nút tự động và checkbox */
         .auto-calc-button {
             background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%) !important;
             margin-top: 20px;
             font-size: 1.2em !important;
+        }
+        
+        /* === CSS MỚI CHO NÚT RESET === */
+        .reset-button {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%) !important;
+            margin-top: 10px;
         }
         
         .auto-update-wrapper {
@@ -287,6 +292,10 @@
                 TÍNH TOÁN TẤT CẢ
             </button>
             
+            <button onclick="resetAllInputs()" class="reset-button">
+                Xóa tất cả thông số
+            </button>
+
             <div class="auto-update-wrapper">
                 <input type="checkbox" id="autoUpdate">
                 <label for="autoUpdate">Tự động cập nhật khi thay đổi thông số</label>
@@ -401,14 +410,17 @@
     </div>
 
     <script>
+        // === HÀM MỚI: Định nghĩa các ID input để dễ dàng quản lý ===
+        const inputIds = ['voltage', 'current', 'kw', 'kva', 'kvar', 'hp', 'pf', 'eff'];
+
         // Cập nhật badges khi thay đổi loại mạng
         document.querySelectorAll('input[name="phase"]').forEach(radio => {
             radio.addEventListener('change', () => {
                 updatePhaseBadges();
-                // Tự động tính toán lại nếu checkbox được chọn
                 if (document.getElementById('autoUpdate').checked) {
                     autoCalculateAll();
                 }
+                saveInputsToLocalStorage(); // === MỚI: Lưu khi đổi Phase ===
             });
         });
 
@@ -418,6 +430,7 @@
                 if (document.getElementById('autoUpdate').checked) {
                     autoCalculateAll();
                 }
+                saveInputsToLocalStorage(); // === MỚI: Lưu khi nhập liệu ===
             });
         });
 
@@ -433,7 +446,6 @@
                     badge.className = 'phase-badge badge-1phase';
                 }
             });
-            // Đặt lại placeholder điện áp gợi ý
             const voltageInput = document.getElementById('voltage');
             if (phase === 3) {
                 voltageInput.placeholder = "380V";
@@ -451,53 +463,95 @@
             return isNaN(value) ? null : value;
         }
 
-        // --- ĐÃ SỬA ĐỔI HÀM NÀY ---
-        // Thêm tham số silentFail (mặc định là false)
         function showResult(elementId, value, unit, formula, silentFail = false) {
             const resultDiv = document.getElementById(elementId);
-            if (value !== null && isFinite(value)) { // Thêm kiểm tra isFinite
+            if (value !== null && isFinite(value)) {
                 resultDiv.style.display = 'block';
                 resultDiv.querySelector('.result-value').textContent = value.toFixed(2) + ' ' + unit;
                 if (formula) {
                     resultDiv.querySelector('.formula').textContent = formula;
                 }
             } else {
-                // Chỉ hiển thị alert nếu không ở chế độ "im lặng"
                 if (!silentFail) {
                     alert('Vui lòng nhập đầy đủ và chính xác các thông số cần thiết!');
                 }
-                // Luôn ẩn kết quả nếu tính toán thất bại
                 resultDiv.style.display = 'none';
             }
         }
 
-        // --- HÀM MỚI ---
-        // Hàm này gọi tất cả các hàm tính toán với silentFail = true
         function autoCalculateAll() {
-            // Tính Amperes
             calcAFromKVA(true);
             calcAFromKW(true);
             calcAFromHP(true);
             calcAFromKVAR(true);
-            // Tính kW
             calcKwFromIVpF(true);
             calcKwFromKVApF(true);
             calcKwFromHPEff(true);
-            // Tính kVA
             calcKVAFromIV(true);
             calcKVAFromKWpF(true);
             calcKVAFromHPEffpF(true);
-            // Tính kVAR
             calcKVARFromKWKVA(true);
-            // Tính HP
             calcHPFromIVEffpF(true);
             calcHPFromKVAEffpF(true);
         }
 
-        // --- TẤT CẢ CÁC HÀM BÊN DƯỚI ĐÃ ĐƯỢC SỬA ĐỔI ---
-        // Chúng đều chấp nhận silentFail và truyền nó vào showResult
+        // === HÀM MỚI: Ẩn tất cả các kết quả ===
+        function clearAllResults() {
+            document.querySelectorAll('.result').forEach(div => {
+                div.style.display = 'none';
+            });
+        }
 
-        // Tính kW từ I, V, pF
+        // === HÀM MỚI: Reset tất cả inputs và Local Storage ===
+        function resetAllInputs() {
+            // Xóa giá trị trong các ô input
+            inputIds.forEach(id => {
+                document.getElementById(id).value = '';
+                localStorage.removeItem(id); // Xóa khỏi Local Storage
+            });
+
+            // Reset Phase về mặc định (3 Pha) và xóa khỏi Local Storage
+            document.getElementById('phase3').checked = true;
+            localStorage.removeItem('phase');
+            
+            updatePhaseBadges(); // Cập nhật lại giao diện Phase
+            clearAllResults(); // Ẩn tất cả các kết quả
+        }
+
+        // === HÀM MỚI: Lưu tất cả giá trị vào Local Storage ===
+        function saveInputsToLocalStorage() {
+            inputIds.forEach(id => {
+                localStorage.setItem(id, document.getElementById(id).value);
+            });
+            localStorage.setItem('phase', getPhase());
+        }
+
+        // === HÀM MỚI: Tải giá trị từ Local Storage khi mở trang ===
+        function loadInputsFromLocalStorage() {
+            // Tải Phase trước
+            const savedPhase = localStorage.getItem('phase');
+            if (savedPhase) {
+                // Đảm bảo radio button được chọn đúng
+                const phaseRadio = document.getElementById(savedPhase === '1' ? 'phase1' : 'phase3');
+                if (phaseRadio) phaseRadio.checked = true;
+            }
+            // Cập nhật badges ngay sau khi tải Phase
+            updatePhaseBadges();
+            
+            // Tải các giá trị input khác
+            inputIds.forEach(id => {
+                const savedValue = localStorage.getItem(id);
+                if (savedValue !== null) {
+                    document.getElementById(id).value = savedValue;
+                }
+            });
+
+            // Tự động tính toán lại dựa trên giá trị đã tải
+            autoCalculateAll();
+        }
+
+        // --- Các hàm tính toán (Không thay đổi) ---
+
         function calcKwFromIVpF(silentFail = false) {
             const v = getInput('voltage');
             const i = getInput('current');
@@ -519,7 +573,6 @@
             }
         }
 
-        // Tính kW từ kVA, pF
         function calcKwFromKVApF(silentFail = false) {
             const kva = getInput('kva');
             const pf = getInput('pf');
@@ -531,7 +584,6 @@
             }
         }
 
-        // Tính kW từ HP, Eff
         function calcKwFromHPEff(silentFail = false) {
             const hp = getInput('hp');
             const eff = getInput('eff');
@@ -543,7 +595,6 @@
             }
         }
 
-        // Tính kVA từ I, V
         function calcKVAFromIV(silentFail = false) {
             const v = getInput('voltage');
             const i = getInput('current');
@@ -564,7 +615,6 @@
             }
         }
 
-        // Tính kVA từ kW, pF
         function calcKVAFromKWpF(silentFail = false) {
             const kw = getInput('kw');
             const pf = getInput('pf');
@@ -576,7 +626,6 @@
             }
         }
 
-        // Tính kVA từ HP, Eff, pF
         function calcKVAFromHPEffpF(silentFail = false) {
             const hp = getInput('hp');
             const eff = getInput('eff');
@@ -589,7 +638,6 @@
             }
         }
 
-        // Tính A từ kVA
         function calcAFromKVA(silentFail = false) {
             const kva = getInput('kva');
             const v = getInput('voltage');
@@ -610,7 +658,6 @@
             }
         }
 
-        // Tính A từ kW
         function calcAFromKW(silentFail = false) {
             const kw = getInput('kw');
             const v = getInput('voltage');
@@ -632,7 +679,6 @@
             }
         }
 
-        // Tính A từ HP
         function calcAFromHP(silentFail = false) {
             const hp = getInput('hp');
             const v = getInput('voltage');
@@ -655,7 +701,6 @@
             }
         }
 
-        // Tính A từ kVAR
         function calcAFromKVAR(silentFail = false) {
             const kvar = getInput('kvar');
             const v = getInput('voltage');
@@ -676,7 +721,6 @@
             }
         }
 
-        // Tính HP từ I, V, Eff, pF
         function calcHPFromIVEffpF(silentFail = false) {
             const i = getInput('current');
             const v = getInput('voltage');
@@ -699,7 +743,6 @@
             }
         }
 
-        // Tính HP từ kVA, Eff, pF
         function calcHPFromKVAEffpF(silentFail = false) {
             const kva = getInput('kva');
             const eff = getInput('eff');
@@ -714,11 +757,10 @@
             }
         }
 
-        // Tính kVAR từ kW, kVA
         function calcKVARFromKWKVA(silentFail = false) {
             const kw = getInput('kw');
             const kva = getInput('kva');
-            if (kw && kva && kva >= kw) { // Thêm điều kiện kva >= kw
+            if (kw && kva && kva >= kw) {
                 const kvar = Math.sqrt(Math.pow(kva, 2) - Math.pow(kw, 2));
                 showResult('result-kvar-kwkva', kvar, 'kVAR', null, silentFail);
             } else {
@@ -726,8 +768,10 @@
             }
         }
 
-        // Khởi tạo badges ban đầu
-        updatePhaseBadges();
+        // === GỌI HÀM TẢI DỮ LIỆU KHI TRANG MỞ ===
+        // Đặt ở cuối cùng để đảm bảo tất cả hàm đã được định nghĩa
+        loadInputsFromLocalStorage();
+
     </script>
 </body>
 </html>
