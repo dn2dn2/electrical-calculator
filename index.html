@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CÔNG CỤ TÍNH TOÁN</title>
+    <title>CÔNG CỤ TÍNH TOÁN ĐIỆN</title>
     <style>
         * {
             margin: 0;
@@ -205,7 +205,6 @@
             font-size: 1.2em !important;
         }
         
-        /* === CSS MỚI CHO NÚT RESET === */
         .reset-button {
             background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%) !important;
             margin-top: 10px;
@@ -232,6 +231,99 @@
             font-weight: 600;
             cursor: pointer;
             margin: 0;
+        }
+
+        /* === CSS CHO FOOTER === */
+        .footer {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .footer p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .footer-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+            padding: 20px 0;
+            border-top: 2px solid #f0f0f0;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .footer-item {
+            padding: 10px;
+        }
+
+        .footer-item strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .footer-item span {
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .footer-copyright {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        .footer-badge {
+            display: inline-block;
+            padding: 8px 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            font-weight: 600;
+            margin: 10px 5px;
+            font-size: 0.85em;
+        }
+
+        @media (max-width: 768px) {
+            .footer {
+                padding: 20px 15px;
+            }
+            
+            .footer-info {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-info {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -405,32 +497,70 @@
                     <div class="formula"></div>
                 </div>
             </div>
-            
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <div class="footer-content">
+                <h3>⚡ Máy Tính Điện Chuyên Nghiệp</h3>
+                <p>Công cụ tính toán điện chính xác và nhanh chóng.</p>
+                
+                <div class="footer-info">
+                    <div class="footer-item">
+                        <strong>🔧 Tính năng</strong>
+                        <span>13 phép tính</span>
+                    </div>
+                    <div class="footer-item">
+                        <strong>⚡ Hỗ trợ</strong>
+                        <span>1 Pha & 3 Pha</span>
+                    </div>
+                    <div class="footer-item">
+                        <strong>💾 Lưu trữ</strong>
+                        <span>Tự động</span>
+                    </div>
+                    <div class="footer-item">
+                        <strong>📱 Thiết bị</strong>
+                        <span>Mọi màn hình</span>
+                    </div>
+                </div>
+
+                <div class="footer-badges">
+                    <span class="footer-badge">✓ Chính xác</span>
+                    <span class="footer-badge">✓ Dễ sử dụng</span>
+                    <span class="footer-badge">✓ Hoàn toàn miễn phí</span>
+                </div>
+
+                <p style="margin-top: 20px; font-size: 0.95em;">
+                    <strong>Tối ưu cho kỹ sư điện</strong>
+                </p>
+
+                <div class="footer-copyright">
+                    <p>© 2024 Công cụ tính toán điện. All rights reserved.</p>
+                    <p>Phát triển bởi Nhất Nguyễn với ❤️ cho cộng đồng kỹ sư Việt Nam.</p>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // === HÀM MỚI: Định nghĩa các ID input để dễ dàng quản lý ===
         const inputIds = ['voltage', 'current', 'kw', 'kva', 'kvar', 'hp', 'pf', 'eff'];
 
-        // Cập nhật badges khi thay đổi loại mạng
         document.querySelectorAll('input[name="phase"]').forEach(radio => {
             radio.addEventListener('change', () => {
                 updatePhaseBadges();
                 if (document.getElementById('autoUpdate').checked) {
                     autoCalculateAll();
                 }
-                saveInputsToLocalStorage(); // === MỚI: Lưu khi đổi Phase ===
+                saveInputsToLocalStorage();
             });
         });
 
-        // Thêm sự kiện cho tất cả các input để tự động tính toán
         document.querySelectorAll('.params-grid input[type="number"]').forEach(input => {
             input.addEventListener('input', () => {
                 if (document.getElementById('autoUpdate').checked) {
                     autoCalculateAll();
                 }
-                saveInputsToLocalStorage(); // === MỚI: Lưu khi nhập liệu ===
+                saveInputsToLocalStorage();
             });
         });
 
@@ -495,30 +625,23 @@
             calcHPFromKVAEffpF(true);
         }
 
-        // === HÀM MỚI: Ẩn tất cả các kết quả ===
         function clearAllResults() {
             document.querySelectorAll('.result').forEach(div => {
                 div.style.display = 'none';
             });
         }
 
-        // === HÀM MỚI: Reset tất cả inputs và Local Storage ===
         function resetAllInputs() {
-            // Xóa giá trị trong các ô input
             inputIds.forEach(id => {
                 document.getElementById(id).value = '';
-                localStorage.removeItem(id); // Xóa khỏi Local Storage
+                localStorage.removeItem(id);
             });
-
-            // Reset Phase về mặc định (3 Pha) và xóa khỏi Local Storage
             document.getElementById('phase3').checked = true;
             localStorage.removeItem('phase');
-            
-            updatePhaseBadges(); // Cập nhật lại giao diện Phase
-            clearAllResults(); // Ẩn tất cả các kết quả
+            updatePhaseBadges();
+            clearAllResults();
         }
 
-        // === HÀM MỚI: Lưu tất cả giá trị vào Local Storage ===
         function saveInputsToLocalStorage() {
             inputIds.forEach(id => {
                 localStorage.setItem(id, document.getElementById(id).value);
@@ -526,38 +649,27 @@
             localStorage.setItem('phase', getPhase());
         }
 
-        // === HÀM MỚI: Tải giá trị từ Local Storage khi mở trang ===
         function loadInputsFromLocalStorage() {
-            // Tải Phase trước
             const savedPhase = localStorage.getItem('phase');
             if (savedPhase) {
-                // Đảm bảo radio button được chọn đúng
                 const phaseRadio = document.getElementById(savedPhase === '1' ? 'phase1' : 'phase3');
                 if (phaseRadio) phaseRadio.checked = true;
             }
-            // Cập nhật badges ngay sau khi tải Phase
             updatePhaseBadges();
-            
-            // Tải các giá trị input khác
             inputIds.forEach(id => {
                 const savedValue = localStorage.getItem(id);
                 if (savedValue !== null) {
                     document.getElementById(id).value = savedValue;
                 }
             });
-
-            // Tự động tính toán lại dựa trên giá trị đã tải
             autoCalculateAll();
         }
-
-        // --- Các hàm tính toán (Không thay đổi) ---
 
         function calcKwFromIVpF(silentFail = false) {
             const v = getInput('voltage');
             const i = getInput('current');
             const pf = getInput('pf');
             const phase = getPhase();
-            
             if (v && i && pf) {
                 let kw, formula;
                 if (phase === 3) {
@@ -599,7 +711,6 @@
             const v = getInput('voltage');
             const i = getInput('current');
             const phase = getPhase();
-            
             if (v && i) {
                 let kva, formula;
                 if (phase === 3) {
@@ -642,7 +753,6 @@
             const kva = getInput('kva');
             const v = getInput('voltage');
             const phase = getPhase();
-            
             if (kva && v) {
                 let a, formula;
                 if (phase === 3) {
@@ -663,7 +773,6 @@
             const v = getInput('voltage');
             const pf = getInput('pf');
             const phase = getPhase();
-            
             if (kw && v && pf) {
                 let a, formula;
                 if (phase === 3) {
@@ -685,7 +794,6 @@
             const eff = getInput('eff');
             const pf = getInput('pf');
             const phase = getPhase();
-            
             if (hp && v && eff && pf) {
                 let a, formula;
                 if (phase === 3) {
@@ -705,7 +813,6 @@
             const kvar = getInput('kvar');
             const v = getInput('voltage');
             const phase = getPhase();
-            
             if (kvar && v) {
                 let a, formula;
                 if (phase === 3) {
@@ -727,7 +834,6 @@
             const eff = getInput('eff');
             const pf = getInput('pf');
             const phase = getPhase();
-            
             if (i && v && eff && pf) {
                 let hp, formula;
                 if (phase === 3) {
@@ -747,7 +853,6 @@
             const kva = getInput('kva');
             const eff = getInput('eff');
             const pf = getInput('pf');
-            
             if (kva && eff && pf) {
                 const hp = (kva * 1000 * pf * (eff / 100)) / 746;
                 const formula = 'HP = (kVA × 1000 × pF × Eff) / 746';
@@ -768,10 +873,7 @@
             }
         }
 
-        // === GỌI HÀM TẢI DỮ LIỆU KHI TRANG MỞ ===
-        // Đặt ở cuối cùng để đảm bảo tất cả hàm đã được định nghĩa
         loadInputsFromLocalStorage();
-
     </script>
 </body>
 </html>
