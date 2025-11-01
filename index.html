@@ -198,6 +198,36 @@
             background: #e74c3c;
             color: white;
         }
+
+        /* Thêm style cho nút tự động và checkbox */
+        .auto-calc-button {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%) !important;
+            margin-top: 20px;
+            font-size: 1.2em !important;
+        }
+        
+        .auto-update-wrapper {
+            text-align: center;
+            margin-top: 15px;
+            padding: 10px;
+            background: #f0f4ff;
+            border-radius: 8px;
+        }
+
+        .auto-update-wrapper input[type="checkbox"] {
+             width: auto;
+             transform: scale(1.2);
+             margin-right: 10px;
+             cursor: pointer;
+        }
+
+        .auto-update-wrapper label {
+            display: inline-block;
+            color: #333;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -252,10 +282,18 @@
                     <input type="number" id="eff" step="0.01" min="0" max="100" placeholder="80 - 95">
                 </div>
             </div>
+
+            <button onclick="autoCalculateAll()" class="auto-calc-button">
+                TÍNH TOÁN TẤT CẢ
+            </button>
+            
+            <div class="auto-update-wrapper">
+                <input type="checkbox" id="autoUpdate">
+                <label for="autoUpdate">Tự động cập nhật khi thay đổi thông số</label>
+            </div>
         </div>
 
         <div class="calculator-grid">
-            <!-- Tính Amperes -->
             <div class="card">
                 <h2>Tính Amperes (A)</h2>
                 <button onclick="calcAFromKVA()">A từ kVA, V <span id="badge-a-kva" class="phase-badge badge-1phase">1 Pha</span></button>
@@ -286,8 +324,7 @@
                     <div class="formula"></div>
                 </div>
             </div>
-			<!-- Tính kW -->
-            <div class="card">
+			<div class="card">
                 <h2>Tính kW (Kilowatts)</h2>
                 <button onclick="calcKwFromIVpF()">kW từ I, V, pF <span id="badge-kw-ivpf" class="phase-badge badge-1phase">1 Pha</span></button>
                 <div id="result-kw-ivpf" class="result" style="display:none;">
@@ -296,14 +333,14 @@
                     <div class="formula"></div>
                 </div>
 
-                <button onclick="calcKwFromKVApF()">kW từ kVA, pF<span id="badge-kw-ivpf" class="phase-badge badge-1phase">1 Pha</span></button>
+                <button onclick="calcKwFromKVApF()">kW từ kVA, pF<span id="badge-kw-kvapf" class="phase-badge badge-1phase">1 Pha</span></button>
                 <div id="result-kw-kvapf" class="result" style="display:none;">
                     <div class="result-label">Kết quả:</div>
                     <div class="result-value"></div>
                     <div class="formula">kW = kVA × pF</div>
                 </div>
 
-                <button onclick="calcKwFromHPEff()">kW từ HP, Eff<span id="badge-kw-ivpf" class="phase-badge badge-1phase">1 Pha</span></button>
+                <button onclick="calcKwFromHPEff()">kW từ HP, Eff<span id="badge-kw-hpeff" class="phase-badge badge-1phase">1 Pha</span></button>
                 <div id="result-kw-hpeff" class="result" style="display:none;">
                     <div class="result-label">Kết quả:</div>
                     <div class="result-value"></div>
@@ -311,7 +348,6 @@
                 </div>
             </div>
 			
-            <!-- Tính kVA -->
             <div class="card">
                 <h2>Tính kVA (Kilovolt-Amperes)</h2>
                 <button onclick="calcKVAFromIV()">kVA từ I, V <span id="badge-kva-iv" class="phase-badge badge-1phase">1 Pha</span></button>
@@ -321,31 +357,29 @@
                     <div class="formula"></div>
                 </div>
 
-                <button onclick="calcKVAFromKWpF()">kVA từ kW, pF<span id="badge-kw-ivpf" class="phase-badge badge-1phase">1 Pha</span></button>
+                <button onclick="calcKVAFromKWpF()">kVA từ kW, pF<span id="badge-kva-kwpf" class="phase-badge badge-1phase">1 Pha</span></button>
                 <div id="result-kva-kwpf" class="result" style="display:none;">
                     <div class="result-label">Kết quả:</div>
                     <div class="result-value"></div>
                     <div class="formula">kVA = kW / pF</div>
                 </div>
 
-                <button onclick="calcKVAFromHPEffpF()">kVA từ HP, Eff, pF<span id="badge-kw-ivpf" class="phase-badge badge-1phase">1 Pha</span></button>
+                <button onclick="calcKVAFromHPEffpF()">kVA từ HP, Eff, pF<span id="badge-kva-hpeffpf" class="phase-badge badge-1phase">1 Pha</span></button>
                 <div id="result-kva-hpeffpf" class="result" style="display:none;">
                     <div class="result-label">Kết quả:</div>
                     <div class="result-value"></div>
                     <div class="formula">kVA = (HP × 0.746) / (Eff/100 × pF)</div>
                 </div>
             </div>
-			<!-- Tính kVAR -->
-            <div class="card">
+			<div class="card">
                 <h2>Tính kVAR (Reactive Power)</h2>
-                <button onclick="calcKVARFromKWKVA()">kVAR từ kW, kVA<span id="badge-kw-ivpf" class="phase-badge badge-1phase">1 Pha</span></button>
+                <button onclick="calcKVARFromKWKVA()">kVAR từ kW, kVA<span id="badge-kvar-kwkva" class="phase-badge badge-1phase">1 Pha</span></button>
                 <div id="result-kvar-kwkva" class="result" style="display:none;">
                     <div class="result-label">Kết quả:</div>
                     <div class="result-value"></div>
                     <div class="formula">kVAR = √(kVA² - kW²)</div>
                 </div>
             </div>
-            <!-- Tính HP -->
             <div class="card">
                 <h2>Tính HP (Horsepower)</h2>
                 <button onclick="calcHPFromIVEffpF()">HP từ I, V, Eff, pF <span id="badge-hp-iveffpf" class="phase-badge badge-1phase">1 Pha</span></button>
@@ -369,7 +403,22 @@
     <script>
         // Cập nhật badges khi thay đổi loại mạng
         document.querySelectorAll('input[name="phase"]').forEach(radio => {
-            radio.addEventListener('change', updatePhaseBadges);
+            radio.addEventListener('change', () => {
+                updatePhaseBadges();
+                // Tự động tính toán lại nếu checkbox được chọn
+                if (document.getElementById('autoUpdate').checked) {
+                    autoCalculateAll();
+                }
+            });
+        });
+
+        // Thêm sự kiện cho tất cả các input để tự động tính toán
+        document.querySelectorAll('.params-grid input[type="number"]').forEach(input => {
+            input.addEventListener('input', () => {
+                if (document.getElementById('autoUpdate').checked) {
+                    autoCalculateAll();
+                }
+            });
         });
 
         function updatePhaseBadges() {
@@ -384,6 +433,13 @@
                     badge.className = 'phase-badge badge-1phase';
                 }
             });
+            // Đặt lại placeholder điện áp gợi ý
+            const voltageInput = document.getElementById('voltage');
+            if (phase === 3) {
+                voltageInput.placeholder = "380V";
+            } else {
+                voltageInput.placeholder = "220V";
+            }
         }
 
         function getPhase() {
@@ -395,21 +451,54 @@
             return isNaN(value) ? null : value;
         }
 
-        function showResult(elementId, value, unit, formula) {
+        // --- ĐÃ SỬA ĐỔI HÀM NÀY ---
+        // Thêm tham số silentFail (mặc định là false)
+        function showResult(elementId, value, unit, formula, silentFail = false) {
             const resultDiv = document.getElementById(elementId);
-            if (value !== null) {
+            if (value !== null && isFinite(value)) { // Thêm kiểm tra isFinite
                 resultDiv.style.display = 'block';
                 resultDiv.querySelector('.result-value').textContent = value.toFixed(2) + ' ' + unit;
                 if (formula) {
                     resultDiv.querySelector('.formula').textContent = formula;
                 }
             } else {
-                alert('Vui lòng nhập đầy đủ các thông số cần thiết!');
+                // Chỉ hiển thị alert nếu không ở chế độ "im lặng"
+                if (!silentFail) {
+                    alert('Vui lòng nhập đầy đủ và chính xác các thông số cần thiết!');
+                }
+                // Luôn ẩn kết quả nếu tính toán thất bại
+                resultDiv.style.display = 'none';
             }
         }
 
+        // --- HÀM MỚI ---
+        // Hàm này gọi tất cả các hàm tính toán với silentFail = true
+        function autoCalculateAll() {
+            // Tính Amperes
+            calcAFromKVA(true);
+            calcAFromKW(true);
+            calcAFromHP(true);
+            calcAFromKVAR(true);
+            // Tính kW
+            calcKwFromIVpF(true);
+            calcKwFromKVApF(true);
+            calcKwFromHPEff(true);
+            // Tính kVA
+            calcKVAFromIV(true);
+            calcKVAFromKWpF(true);
+            calcKVAFromHPEffpF(true);
+            // Tính kVAR
+            calcKVARFromKWKVA(true);
+            // Tính HP
+            calcHPFromIVEffpF(true);
+            calcHPFromKVAEffpF(true);
+        }
+
+        // --- TẤT CẢ CÁC HÀM BÊN DƯỚI ĐÃ ĐƯỢC SỬA ĐỔI ---
+        // Chúng đều chấp nhận silentFail và truyền nó vào showResult
+
         // Tính kW từ I, V, pF
-        function calcKwFromIVpF() {
+        function calcKwFromIVpF(silentFail = false) {
             const v = getInput('voltage');
             const i = getInput('current');
             const pf = getInput('pf');
@@ -424,38 +513,38 @@
                     kw = (v * i * pf) / 1000;
                     formula = 'kW = (V × I × pF) / 1000';
                 }
-                showResult('result-kw-ivpf', kw, 'kW', formula);
+                showResult('result-kw-ivpf', kw, 'kW', formula, silentFail);
             } else {
-                showResult('result-kw-ivpf', null);
+                showResult('result-kw-ivpf', null, null, null, silentFail);
             }
         }
 
         // Tính kW từ kVA, pF
-        function calcKwFromKVApF() {
+        function calcKwFromKVApF(silentFail = false) {
             const kva = getInput('kva');
             const pf = getInput('pf');
             if (kva && pf) {
                 const kw = kva * pf;
-                showResult('result-kw-kvapf', kw, 'kW');
+                showResult('result-kw-kvapf', kw, 'kW', null, silentFail);
             } else {
-                showResult('result-kw-kvapf', null);
+                showResult('result-kw-kvapf', null, null, null, silentFail);
             }
         }
 
         // Tính kW từ HP, Eff
-        function calcKwFromHPEff() {
+        function calcKwFromHPEff(silentFail = false) {
             const hp = getInput('hp');
             const eff = getInput('eff');
             if (hp && eff) {
                 const kw = (hp * 0.746) / (eff / 100);
-                showResult('result-kw-hpeff', kw, 'kW');
+                showResult('result-kw-hpeff', kw, 'kW', null, silentFail);
             } else {
-                showResult('result-kw-hpeff', null);
+                showResult('result-kw-hpeff', null, null, null, silentFail);
             }
         }
 
         // Tính kVA từ I, V
-        function calcKVAFromIV() {
+        function calcKVAFromIV(silentFail = false) {
             const v = getInput('voltage');
             const i = getInput('current');
             const phase = getPhase();
@@ -469,39 +558,39 @@
                     kva = (v * i) / 1000;
                     formula = 'kVA = (V × I) / 1000';
                 }
-                showResult('result-kva-iv', kva, 'kVA', formula);
+                showResult('result-kva-iv', kva, 'kVA', formula, silentFail);
             } else {
-                showResult('result-kva-iv', null);
+                showResult('result-kva-iv', null, null, null, silentFail);
             }
         }
 
         // Tính kVA từ kW, pF
-        function calcKVAFromKWpF() {
+        function calcKVAFromKWpF(silentFail = false) {
             const kw = getInput('kw');
             const pf = getInput('pf');
             if (kw && pf) {
                 const kva = kw / pf;
-                showResult('result-kva-kwpf', kva, 'kVA');
+                showResult('result-kva-kwpf', kva, 'kVA', null, silentFail);
             } else {
-                showResult('result-kva-kwpf', null);
+                showResult('result-kva-kwpf', null, null, null, silentFail);
             }
         }
 
         // Tính kVA từ HP, Eff, pF
-        function calcKVAFromHPEffpF() {
+        function calcKVAFromHPEffpF(silentFail = false) {
             const hp = getInput('hp');
             const eff = getInput('eff');
             const pf = getInput('pf');
             if (hp && eff && pf) {
                 const kva = (hp * 0.746) / ((eff / 100) * pf);
-                showResult('result-kva-hpeffpf', kva, 'kVA');
+                showResult('result-kva-hpeffpf', kva, 'kVA', null, silentFail);
             } else {
-                showResult('result-kva-hpeffpf', null);
+                showResult('result-kva-hpeffpf', null, null, null, silentFail);
             }
         }
 
         // Tính A từ kVA
-        function calcAFromKVA() {
+        function calcAFromKVA(silentFail = false) {
             const kva = getInput('kva');
             const v = getInput('voltage');
             const phase = getPhase();
@@ -515,14 +604,14 @@
                     a = (kva * 1000) / v;
                     formula = 'A = (kVA × 1000) / V';
                 }
-                showResult('result-a-kva', a, 'A', formula);
+                showResult('result-a-kva', a, 'A', formula, silentFail);
             } else {
-                showResult('result-a-kva', null);
+                showResult('result-a-kva', null, null, null, silentFail);
             }
         }
 
         // Tính A từ kW
-        function calcAFromKW() {
+        function calcAFromKW(silentFail = false) {
             const kw = getInput('kw');
             const v = getInput('voltage');
             const pf = getInput('pf');
@@ -537,14 +626,14 @@
                     a = (kw * 1000) / (v * pf);
                     formula = 'A = (kW × 1000) / (V × pF)';
                 }
-                showResult('result-a-kw', a, 'A', formula);
+                showResult('result-a-kw', a, 'A', formula, silentFail);
             } else {
-                showResult('result-a-kw', null);
+                showResult('result-a-kw', null, null, null, silentFail);
             }
         }
 
         // Tính A từ HP
-        function calcAFromHP() {
+        function calcAFromHP(silentFail = false) {
             const hp = getInput('hp');
             const v = getInput('voltage');
             const eff = getInput('eff');
@@ -560,14 +649,14 @@
                     a = (hp * 746) / (v * (eff / 100) * pf);
                     formula = 'A = (HP × 746) / (V × Eff × pF)';
                 }
-                showResult('result-a-hp', a, 'A', formula);
+                showResult('result-a-hp', a, 'A', formula, silentFail);
             } else {
-                showResult('result-a-hp', null);
+                showResult('result-a-hp', null, null, null, silentFail);
             }
         }
 
         // Tính A từ kVAR
-        function calcAFromKVAR() {
+        function calcAFromKVAR(silentFail = false) {
             const kvar = getInput('kvar');
             const v = getInput('voltage');
             const phase = getPhase();
@@ -581,14 +670,14 @@
                     a = (kvar * 1000) / v;
                     formula = 'A = (kVAR × 1000) / V';
                 }
-                showResult('result-a-kvar', a, 'A', formula);
+                showResult('result-a-kvar', a, 'A', formula, silentFail);
             } else {
-                showResult('result-a-kvar', null);
+                showResult('result-a-kvar', null, null, null, silentFail);
             }
         }
 
         // Tính HP từ I, V, Eff, pF
-        function calcHPFromIVEffpF() {
+        function calcHPFromIVEffpF(silentFail = false) {
             const i = getInput('current');
             const v = getInput('voltage');
             const eff = getInput('eff');
@@ -604,14 +693,14 @@
                     hp = (v * i * pf * (eff / 100)) / 746;
                     formula = 'HP = (V × I × pF × Eff) / 746';
                 }
-                showResult('result-hp-iveffpf', hp, 'HP', formula);
+                showResult('result-hp-iveffpf', hp, 'HP', formula, silentFail);
             } else {
-                showResult('result-hp-iveffpf', null);
+                showResult('result-hp-iveffpf', null, null, null, silentFail);
             }
         }
 
         // Tính HP từ kVA, Eff, pF
-        function calcHPFromKVAEffpF() {
+        function calcHPFromKVAEffpF(silentFail = false) {
             const kva = getInput('kva');
             const eff = getInput('eff');
             const pf = getInput('pf');
@@ -619,21 +708,21 @@
             if (kva && eff && pf) {
                 const hp = (kva * 1000 * pf * (eff / 100)) / 746;
                 const formula = 'HP = (kVA × 1000 × pF × Eff) / 746';
-                showResult('result-hp-kvaeffpf', hp, 'HP', formula);
+                showResult('result-hp-kvaeffpf', hp, 'HP', formula, silentFail);
             } else {
-                showResult('result-hp-kvaeffpf', null);
+                showResult('result-hp-kvaeffpf', null, null, null, silentFail);
             }
         }
 
         // Tính kVAR từ kW, kVA
-        function calcKVARFromKWKVA() {
+        function calcKVARFromKWKVA(silentFail = false) {
             const kw = getInput('kw');
             const kva = getInput('kva');
-            if (kw && kva) {
+            if (kw && kva && kva >= kw) { // Thêm điều kiện kva >= kw
                 const kvar = Math.sqrt(Math.pow(kva, 2) - Math.pow(kw, 2));
-                showResult('result-kvar-kwkva', kvar, 'kVAR');
+                showResult('result-kvar-kwkva', kvar, 'kVAR', null, silentFail);
             } else {
-                showResult('result-kvar-kwkva', null);
+                showResult('result-kvar-kwkva', null, null, null, silentFail);
             }
         }
 
