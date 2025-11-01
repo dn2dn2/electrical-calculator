@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi"> <head>
+<html lang="vi">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-key-text="pageTitle">CÔNG CỤ TÍNH TOÁN</title>
+    <title>CÔNG CỤ TÍNH TOÁN</title>
     <style>
         * {
             margin: 0;
@@ -22,55 +23,13 @@
             margin: 0 auto;
         }
 
-        /* === CSS MỚI CHO BỘ CHỌN NGÔN NGỮ === */
-        .header-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-        
-        .header-controls h1 {
-            flex-grow: 1;
+        h1 {
             text-align: center;
             color: white;
+            margin-bottom: 30px;
             font-size: 2.5em;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            margin: 0; /* Xóa margin-bottom cũ */
         }
-        
-        .lang-switcher {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px 15px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .lang-switcher label {
-            color: white;
-            font-weight: 600;
-            margin-bottom: 0; /* Ghi đè style cũ */
-        }
-        
-        .lang-switcher select {
-            background: white;
-            border: 2px solid #667eea;
-            border-radius: 8px;
-            padding: 5px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #667eea;
-            cursor: pointer;
-        }
-        
-        .lang-switcher select:focus {
-            outline: none;
-            border-color: #764ba2;
-        }
-        /* === HẾT CSS MỚI === */
-
 
         .calculator-grid {
             display: grid;
@@ -246,6 +205,7 @@
             font-size: 1.2em !important;
         }
         
+        /* === CSS MỚI CHO NÚT RESET === */
         .reset-button {
             background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%) !important;
             margin-top: 10px;
@@ -277,180 +237,170 @@
 </head>
 <body>
     <div class="container">
-        
-        <div class="header-controls">
-            <h1 data-key-text="mainHeader">⚡ CÔNG CỤ TÍNH TOÁN ĐIỆN</h1>
-            
-            <div class="lang-switcher">
-                <label for="lang-select" data-key-text="langLabel">Ngôn ngữ:</label>
-                <select id="lang-select">
-                    <option value="vi">Tiếng Việt</option>
-                    <option value="en">English</option>
-                </select>
-            </div>
-        </div>
+        <h1>⚡ CÔNG CỤ TÍNH TOÁN ĐIỆN</h1>
+
         <div class="input-params">
-            <h2 data-key-text="inputHeader">Thông Số Đầu Vào</h2>
+            <h2>Thông Số Đầu Vào</h2>
             
             <div class="phase-selector">
                 <div class="phase-option">
                     <input type="radio" id="phase1" name="phase" value="1">
-                    <label for="phase1" data-key-text="phase1Label">🔵 Mạng 1 Pha</label>
+                    <label for="phase1">🔵 Mạng 1 Pha</label>
                 </div>
                 <div class="phase-option">
                     <input type="radio" id="phase3" name="phase" value="3" checked>
-                    <label for="phase3" data-key-text="phase3Label">🔴 Mạng 3 Pha</label>
+                    <label for="phase3">🔴 Mạng 3 Pha</label>
                 </div>
             </div>
 
             <div class="params-grid">
                 <div class="input-group">
-                    <label data-key-text="voltageLabel">Điện áp V</label>
-                    <input type="number" id="voltage" step="0.01" data-key-placeholder="voltagePlaceholder" placeholder="220V (1 pha) hoặc 380V (3 pha)">
+                    <label>Điện áp V</label>
+                    <input type="number" id="voltage" step="0.01" placeholder="220V (1 pha) hoặc 380V (3 pha)">
                 </div>
                 <div class="input-group">
-                    <label data-key-text="currentLabel">Dòng điện I (A)</label>
-                    <input type="number" id="current" step="0.01" data-key-placeholder="currentPlaceholder" placeholder="Nhập dòng điện">
+                    <label>Dòng điện I (A)</label>
+                    <input type="number" id="current" step="0.01" placeholder="Nhập dòng điện">
                 </div>
                 <div class="input-group">
-                    <label data-key-text="kwLabel">Công suất kW</label>
-                    <input type="number" id="kw" step="0.01" data-key-placeholder="kwPlaceholder" placeholder="Nhập kW">
+                    <label>Công suất kW</label>
+                    <input type="number" id="kw" step="0.01" placeholder="Nhập kW">
                 </div>
                 <div class="input-group">
-                    <label data-key-text="kvaLabel">Công suất kVA</label>
-                    <input type="number" id="kva" step="0.01" data-key-placeholder="kvaPlaceholder" placeholder="Nhập kVA">
+                    <label>Công suất kVA</label>
+                    <input type="number" id="kva" step="0.01" placeholder="Nhập kVA">
                 </div>
                 <div class="input-group">
-                    <label data-key-text="kvarLabel">Công suất kVAR</label>
-                    <input type="number" id="kvar" step="0.01" data-key-placeholder="kvarPlaceholder" placeholder="Nhập kVAR">
+                    <label>Công suất kVAR</label>
+                    <input type="number" id="kvar" step="0.01" placeholder="Nhập kVAR">
                 </div>
                 <div class="input-group">
-                    <label data-key-text="hpLabel">Công suất HP</label>
-                    <input type="number" id="hp" step="0.01" data-key-placeholder="hpPlaceholder" placeholder="Nhập HP">
+                    <label>Công suất HP</label>
+                    <input type="number" id="hp" step="0.01" placeholder="Nhập HP">
                 </div>
                 <div class="input-group">
-                    <label data-key-text="pfLabel">Hệ số công suất (Cos φ - pF)</label>
-                    <input type="number" id="pf" step="0.01" min="0" max="1" data-key-placeholder="pfPlaceholder" placeholder="0.8 - 1.0">
+                    <label>Hệ số công suất (Cos φ - pF)</label>
+                    <input type="number" id="pf" step="0.01" min="0" max="1" placeholder="0.8 - 1.0">
                 </div>
                 <div class="input-group">
-                    <label data-key-text="effLabel">Hiệu suất Eff (%)</label>
-                    <input type="number" id="eff" step="0.01" min="0" max="100" data-key-placeholder="effPlaceholder" placeholder="80 - 95">
+                    <label>Hiệu suất Eff (%)</label>
+                    <input type="number" id="eff" step="0.01" min="0" max="100" placeholder="80 - 95">
                 </div>
             </div>
 
-            <button onclick="autoCalculateAll()" class="auto-calc-button" data-key-text="calcAllButton">
+            <button onclick="autoCalculateAll()" class="auto-calc-button">
                 TÍNH TOÁN TẤT CẢ
             </button>
             
-            <button onclick="resetAllInputs()" class="reset-button" data-key-text="resetButton">
+            <button onclick="resetAllInputs()" class="reset-button">
                 Xóa tất cả thông số
             </button>
 
             <div class="auto-update-wrapper">
                 <input type="checkbox" id="autoUpdate">
-                <label for="autoUpdate" data-key-text="autoUpdateLabel">Tự động cập nhật khi thay đổi thông số</label>
+                <label for="autoUpdate">Tự động cập nhật khi thay đổi thông số</label>
             </div>
         </div>
 
         <div class="calculator-grid">
             <div class="card">
-                <h2 data-key-text="calcAHeader">Tính Amperes (A)</h2>
-                <button onclick="calcAFromKVA()" data-key-text="calcAFromKVAButton">A từ kVA, V <span id="badge-a-kva" class="phase-badge badge-1phase">1 Pha</span></button>
+                <h2>Tính Amperes (A)</h2>
+                <button onclick="calcAFromKVA()">A từ kVA, V <span id="badge-a-kva" class="phase-badge badge-1phase">1 Pha</span></button>
                 <div id="result-a-kva" class="result" style="display:none;">
-                    <div class="result-label" data-key-text="resultLabel">Kết quả:</div>
+                    <div class="result-label">Kết quả:</div>
                     <div class="result-value"></div>
                     <div class="formula"></div>
                 </div>
 
-                <button onclick="calcAFromKW()" data-key-text="calcAFromKWButton">A từ kW, V, pF <span id="badge-a-kw" class="phase-badge badge-1phase">1 Pha</span></button>
+                <button onclick="calcAFromKW()">A từ kW, V, pF <span id="badge-a-kw" class="phase-badge badge-1phase">1 Pha</span></button>
                 <div id="result-a-kw" class="result" style="display:none;">
-                    <div class="result-label" data-key-text="resultLabel">Kết quả:</div>
+                    <div class="result-label">Kết quả:</div>
                     <div class="result-value"></div>
                     <div class="formula"></div>
                 </div>
 
-                <button onclick="calcAFromHP()" data-key-text="calcAFromHPButton">A từ HP, V, Eff, pF <span id="badge-a-hp" class="phase-badge badge-1phase">1 Pha</span></button>
+                <button onclick="calcAFromHP()">A từ HP, V, Eff, pF <span id="badge-a-hp" class="phase-badge badge-1phase">1 Pha</span></button>
                 <div id="result-a-hp" class="result" style="display:none;">
-                    <div class="result-label" data-key-text="resultLabel">Kết quả:</div>
+                    <div class="result-label">Kết quả:</div>
                     <div class="result-value"></div>
                     <div class="formula"></div>
                 </div>
 
-                <button onclick="calcAFromKVAR()" data-key-text="calcAFromKVARButton">A từ kVAR, V <span id="badge-a-kvar" class="phase-badge badge-1phase">1 Pha</span></button>
+                <button onclick="calcAFromKVAR()">A từ kVAR, V <span id="badge-a-kvar" class="phase-badge badge-1phase">1 Pha</span></button>
                 <div id="result-a-kvar" class="result" style="display:none;">
-                    <div class="result-label" data-key-text="resultLabel">Kết quả:</div>
+                    <div class="result-label">Kết quả:</div>
                     <div class="result-value"></div>
                     <div class="formula"></div>
                 </div>
             </div>
 			<div class="card">
-                <h2 data-key-text="calcKwHeader">Tính kW (Kilowatts)</h2>
-                <button onclick="calcKwFromIVpF()" data-key-text="calcKwFromIVpFButton">kW từ I, V, pF <span id="badge-kw-ivpf" class="phase-badge badge-1phase">1 Pha</span></button>
+                <h2>Tính kW (Kilowatts)</h2>
+                <button onclick="calcKwFromIVpF()">kW từ I, V, pF <span id="badge-kw-ivpf" class="phase-badge badge-1phase">1 Pha</span></button>
                 <div id="result-kw-ivpf" class="result" style="display:none;">
-                    <div class="result-label" data-key-text="resultLabel">Kết quả:</div>
+                    <div class="result-label">Kết quả:</div>
                     <div class="result-value"></div>
                     <div class="formula"></div>
                 </div>
 
-                <button onclick="calcKwFromKVApF()" data-key-text="calcKwFromKVApFButton">kW từ kVA, pF<span id="badge-kw-kvapf" class="phase-badge badge-1phase">1 Pha</span></button>
+                <button onclick="calcKwFromKVApF()">kW từ kVA, pF<span id="badge-kw-kvapf" class="phase-badge badge-1phase">1 Pha</span></button>
                 <div id="result-kw-kvapf" class="result" style="display:none;">
-                    <div class="result-label" data-key-text="resultLabel">Kết quả:</div>
+                    <div class="result-label">Kết quả:</div>
                     <div class="result-value"></div>
                     <div class="formula">kW = kVA × pF</div>
                 </div>
 
-                <button onclick="calcKwFromHPEff()" data-key-text="calcKwFromHPEffButton">kW từ HP, Eff<span id="badge-kw-hpeff" class="phase-badge badge-1phase">1 Pha</span></button>
+                <button onclick="calcKwFromHPEff()">kW từ HP, Eff<span id="badge-kw-hpeff" class="phase-badge badge-1phase">1 Pha</span></button>
                 <div id="result-kw-hpeff" class="result" style="display:none;">
-                    <div class="result-label" data-key-text="resultLabel">Kết quả:</div>
+                    <div class="result-label">Kết quả:</div>
                     <div class="result-value"></div>
                     <div class="formula">kW = (HP × 0.746) / (Eff/100)</div>
                 </div>
             </div>
 			
             <div class="card">
-                <h2 data-key-text="calcKvaHeader">Tính kVA (Kilovolt-Amperes)</h2>
-                <button onclick="calcKVAFromIV()" data-key-text="calcKVAFromIVButton">kVA từ I, V <span id="badge-kva-iv" class="phase-badge badge-1phase">1 Pha</span></button>
+                <h2>Tính kVA (Kilovolt-Amperes)</h2>
+                <button onclick="calcKVAFromIV()">kVA từ I, V <span id="badge-kva-iv" class="phase-badge badge-1phase">1 Pha</span></button>
                 <div id="result-kva-iv" class="result" style="display:none;">
-                    <div class="result-label" data-key-text="resultLabel">Kết quả:</div>
+                    <div class="result-label">Kết quả:</div>
                     <div class="result-value"></div>
                     <div class="formula"></div>
                 </div>
 
-                <button onclick="calcKVAFromKWpF()" data-key-text="calcKVAFromKWpFButton">kVA từ kW, pF<span id="badge-kva-kwpf" class="phase-badge badge-1phase">1 Pha</span></button>
+                <button onclick="calcKVAFromKWpF()">kVA từ kW, pF<span id="badge-kva-kwpf" class="phase-badge badge-1phase">1 Pha</span></button>
                 <div id="result-kva-kwpf" class="result" style="display:none;">
-                    <div class="result-label" data-key-text="resultLabel">Kết quả:</div>
+                    <div class="result-label">Kết quả:</div>
                     <div class="result-value"></div>
                     <div class="formula">kVA = kW / pF</div>
                 </div>
 
-                <button onclick="calcKVAFromHPEffpF()" data-key-text="calcKVAFromHPEffpFButton">kVA từ HP, Eff, pF<span id="badge-kva-hpeffpf" class="phase-badge badge-1phase">1 Pha</span></button>
+                <button onclick="calcKVAFromHPEffpF()">kVA từ HP, Eff, pF<span id="badge-kva-hpeffpf" class="phase-badge badge-1phase">1 Pha</span></button>
                 <div id="result-kva-hpeffpf" class="result" style="display:none;">
-                    <div class="result-label" data-key-text="resultLabel">Kết quả:</div>
+                    <div class="result-label">Kết quả:</div>
                     <div class="result-value"></div>
                     <div class="formula">kVA = (HP × 0.746) / (Eff/100 × pF)</div>
                 </div>
             </div>
 			<div class="card">
-                <h2 data-key-text="calcKvarHeader">Tính kVAR (Reactive Power)</h2>
-                <button onclick="calcKVARFromKWKVA()" data-key-text="calcKVARFromKWKVAButton">kVAR từ kW, kVA<span id="badge-kvar-kwkva" class="phase-badge badge-1phase">1 Pha</span></button>
+                <h2>Tính kVAR (Reactive Power)</h2>
+                <button onclick="calcKVARFromKWKVA()">kVAR từ kW, kVA<span id="badge-kvar-kwkva" class="phase-badge badge-1phase">1 Pha</span></button>
                 <div id="result-kvar-kwkva" class="result" style="display:none;">
-                    <div class="result-label" data-key-text="resultLabel">Kết quả:</div>
+                    <div class="result-label">Kết quả:</div>
                     <div class="result-value"></div>
                     <div class="formula">kVAR = √(kVA² - kW²)</div>
                 </div>
             </div>
             <div class="card">
-                <h2 data-key-text="calcHpHeader">Tính HP (Horsepower)</h2>
-                <button onclick="calcHPFromIVEffpF()" data-key-text="calcHPFromIVEffpFButton">HP từ I, V, Eff, pF <span id="badge-hp-iveffpf" class="phase-badge badge-1phase">1 Pha</span></button>
+                <h2>Tính HP (Horsepower)</h2>
+                <button onclick="calcHPFromIVEffpF()">HP từ I, V, Eff, pF <span id="badge-hp-iveffpf" class="phase-badge badge-1phase">1 Pha</span></button>
                 <div id="result-hp-iveffpf" class="result" style="display:none;">
-                    <div class="result-label" data-key-text="resultLabel">Kết quả:</div>
+                    <div class="result-label">Kết quả:</div>
                     <div class="result-value"></div>
                     <div class="formula"></div>
                 </div>
 
-                <button onclick="calcHPFromKVAEffpF()" data-key-text="calcHPFromKVAEffpFButton">HP từ kVA, Eff, pF <span id="badge-hp-kvaeffpf" class="phase-badge badge-1phase">1 Pha</span></button>
+                <button onclick="calcHPFromKVAEffpF()">HP từ kVA, Eff, pF <span id="badge-hp-kvaeffpf" class="phase-badge badge-1phase">1 Pha</span></button>
                 <div id="result-hp-kvaeffpf" class="result" style="display:none;">
-                    <div class="result-label" data-key-text="resultLabel">Kết quả:</div>
+                    <div class="result-label">Kết quả:</div>
                     <div class="result-value"></div>
                     <div class="formula"></div>
                 </div>
@@ -460,162 +410,7 @@
     </div>
 
     <script>
-        // === BẮT ĐẦU PHẦN ĐA NGÔN NGỮ ===
-
-        const translations = {
-            "vi": {
-                // Header & Chung
-                "pageTitle": "CÔNG CỤ TÍNH TOÁN ĐIỆN",
-                "mainHeader": "⚡ CÔNG CỤ TÍNH TOÁN ĐIỆN",
-                "langLabel": "Ngôn ngữ:",
-                "resultLabel": "Kết quả:",
-                // Thông số đầu vào
-                "inputHeader": "Thông Số Đầu Vào",
-                "phase1Label": "🔵 Mạng 1 Pha",
-                "phase3Label": "🔴 Mạng 3 Pha",
-                "voltageLabel": "Điện áp V",
-                "voltagePlaceholder": "220V (1 pha) hoặc 380V (3 pha)",
-                "currentLabel": "Dòng điện I (A)",
-                "currentPlaceholder": "Nhập dòng điện",
-                "kwLabel": "Công suất kW",
-                "kwPlaceholder": "Nhập kW",
-                "kvaLabel": "Công suất kVA",
-                "kvaPlaceholder": "Nhập kVA",
-                "kvarLabel": "Công suất kVAR",
-                "kvarPlaceholder": "Nhập kVAR",
-                "hpLabel": "Công suất HP",
-                "hpPlaceholder": "Nhập HP",
-                "pfLabel": "Hệ số công suất (Cos φ - pF)",
-                "pfPlaceholder": "0.8 - 1.0",
-                "effLabel": "Hiệu suất Eff (%)",
-                "effPlaceholder": "80 - 95",
-                "calcAllButton": "TÍNH TOÁN TẤT CẢ",
-                "resetButton": "Xóa tất cả thông số",
-                "autoUpdateLabel": "Tự động cập nhật khi thay đổi thông số",
-                "alertMissingParams": "Vui lòng nhập đầy đủ và chính xác các thông số cần thiết!",
-                // Card Tính Amperes
-                "calcAHeader": "Tính Amperes (A)",
-                "calcAFromKVAButton": "A từ kVA, V",
-                "calcAFromKWButton": "A từ kW, V, pF",
-                "calcAFromHPButton": "A từ HP, V, Eff, pF",
-                "calcAFromKVARButton": "A từ kVAR, V",
-                // Card Tính kW
-                "calcKwHeader": "Tính kW (Kilowatts)",
-                "calcKwFromIVpFButton": "kW từ I, V, pF",
-                "calcKwFromKVApFButton": "kW từ kVA, pF",
-                "calcKwFromHPEffButton": "kW từ HP, Eff",
-                // Card Tính kVA
-                "calcKvaHeader": "Tính kVA (Kilovolt-Amperes)",
-                "calcKVAFromIVButton": "kVA từ I, V",
-                "calcKVAFromKWpFButton": "kVA từ kW, pF",
-                "calcKVAFromHPEffpFButton": "kVA từ HP, Eff, pF",
-                // Card Tính kVAR
-                "calcKvarHeader": "Tính kVAR (Reactive Power)",
-                "calcKVARFromKWKVAButton": "kVAR từ kW, kVA",
-                // Card Tính HP
-                "calcHpHeader": "Tính HP (Horsepower)",
-                "calcHPFromIVEffpFButton": "HP từ I, V, Eff, pF",
-                "calcHPFromKVAEffpFButton": "HP từ kVA, Eff, pF"
-            },
-            "en": {
-                // Header & Chung
-                "pageTitle": "ELECTRICAL CALCULATION TOOL",
-                "mainHeader": "⚡ ELECTRICAL CALCULATION TOOL",
-                "langLabel": "Language:",
-                "resultLabel": "Result:",
-                // Thông số đầu vào
-                "inputHeader": "Input Parameters",
-                "phase1Label": "🔵 1-Phase System",
-                "phase3Label": "🔴 3-Phase System",
-                "voltageLabel": "Voltage V",
-                "voltagePlaceholder": "220V (1-phase) or 380V (3-phase)",
-                "currentLabel": "Current I (A)",
-                "currentPlaceholder": "Enter current",
-                "kwLabel": "Power kW",
-                "kwPlaceholder": "Enter kW",
-                "kvaLabel": "Power kVA",
-                "kvaPlaceholder": "Enter kVA",
-                "kvarLabel": "Power kVAR",
-                "kvarPlaceholder": "Enter kVAR",
-                "hpLabel": "Power HP",
-                "hpPlaceholder": "Enter HP",
-                "pfLabel": "Power Factor (Cos φ - pF)",
-                "pfPlaceholder": "0.8 - 1.0",
-                "effLabel": "Efficiency Eff (%)",
-                "effPlaceholder": "80 - 95",
-                "calcAllButton": "CALCULATE ALL",
-                "resetButton": "Reset All Parameters",
-                "autoUpdateLabel": "Auto-update on parameter change",
-                "alertMissingParams": "Please enter all required parameters correctly!",
-                // Card Tính Amperes
-                "calcAHeader": "Calculate Amperes (A)",
-                "calcAFromKVAButton": "A from kVA, V",
-                "calcAFromKWButton": "A from kW, V, pF",
-                "calcAFromHPButton": "A from HP, V, Eff, pF",
-                "calcAFromKVARButton": "A from kVAR, V",
-                // Card Tính kW
-                "calcKwHeader": "Calculate kW (Kilowatts)",
-                "calcKwFromIVpFButton": "kW from I, V, pF",
-                "calcKwFromKVApFButton": "kW from kVA, pF",
-                "calcKwFromHPEffButton": "kW from HP, Eff",
-                // Card Tính kVA
-                "calcKvaHeader": "Calculate kVA (Kilovolt-Amperes)",
-                "calcKVAFromIVButton": "kVA from I, V",
-                "calcKVAFromKWpFButton": "kVA from kW, pF",
-                "calcKVAFromHPEffpFButton": "kVA from HP, Eff, pF",
-                // Card Tính kVAR
-                "calcKvarHeader": "Calculate kVAR (Reactive Power)",
-                "calcKVARFromKWKVAButton": "kVAR from kW, kVA",
-                // Card Tính HP
-                "calcHpHeader": "Calculate HP (Horsepower)",
-                "calcHPFromIVEffpFButton": "HP from I, V, Eff, pF",
-                "calcHPFromKVAEffpFButton": "HP from kVA, Eff, pF"
-            }
-        };
-
-        let currentLanguage = 'vi'; // Biến toàn cục để lưu ngôn ngữ hiện tại
-
-        function setLanguage(lang) {
-            currentLanguage = lang; // Cập nhật biến toàn cục
-            localStorage.setItem('language', lang); // Lưu vào Local Storage
-            
-            // Cập nhật thuộc tính lang của thẻ <html>
-            document.documentElement.lang = lang; 
-
-            // Cập nhật văn bản (textContent)
-            document.querySelectorAll('[data-key-text]').forEach(el => {
-                const key = el.dataset.keyText;
-                if (translations[lang][key]) {
-                    el.textContent = translations[lang][key];
-                }
-            });
-
-            // Cập nhật placeholders
-            document.querySelectorAll('[data-key-placeholder]').forEach(el => {
-                const key = el.dataset.keyPlaceholder;
-                if (translations[lang][key]) {
-                    el.placeholder = translations[lang][key];
-                }
-            });
-
-            // Cập nhật Title trang
-            const titleKey = document.title.dataset.keyText;
-            if (titleKey) {
-                document.title = translations[lang][titleKey];
-            }
-            
-            // Cập nhật placeholder điện áp
-            updatePhaseBadges();
-        }
-
-        // Thêm sự kiện cho dropdown ngôn ngữ
-        document.getElementById('lang-select').addEventListener('change', function() {
-            setLanguage(this.value);
-        });
-
-        // === KẾT THÚC PHẦN ĐA NGÔN NGỮ ===
-
-
+        // === HÀM MỚI: Định nghĩa các ID input để dễ dàng quản lý ===
         const inputIds = ['voltage', 'current', 'kw', 'kva', 'kvar', 'hp', 'pf', 'eff'];
 
         // Cập nhật badges khi thay đổi loại mạng
@@ -625,7 +420,7 @@
                 if (document.getElementById('autoUpdate').checked) {
                     autoCalculateAll();
                 }
-                saveInputsToLocalStorage();
+                saveInputsToLocalStorage(); // === MỚI: Lưu khi đổi Phase ===
             });
         });
 
@@ -635,31 +430,28 @@
                 if (document.getElementById('autoUpdate').checked) {
                     autoCalculateAll();
                 }
-                saveInputsToLocalStorage();
+                saveInputsToLocalStorage(); // === MỚI: Lưu khi nhập liệu ===
             });
         });
 
         function updatePhaseBadges() {
             const phase = getPhase();
             const badges = document.querySelectorAll('.phase-badge');
-            
-            // Lấy văn bản badge từ "từ điển"
-            const badgeText1Phase = translations[currentLanguage]["phase1Label"].split(' ')[1] || "1 Pha";
-            const badgeText3Phase = translations[currentLanguage]["phase3Label"].split(' ')[1] || "3 Pha";
-
             badges.forEach(badge => {
                 if (phase === 3) {
-                    badge.textContent = badgeText3Phase;
+                    badge.textContent = '3 Pha';
                     badge.className = 'phase-badge badge-3phase';
                 } else {
-                    badge.textContent = badgeText1Phase;
+                    badge.textContent = '1 Pha';
                     badge.className = 'phase-badge badge-1phase';
                 }
             });
-            
-            // Cập nhật placeholder điện áp dựa trên ngôn ngữ
             const voltageInput = document.getElementById('voltage');
-            voltageInput.placeholder = translations[currentLanguage]["voltagePlaceholder"];
+            if (phase === 3) {
+                voltageInput.placeholder = "380V";
+            } else {
+                voltageInput.placeholder = "220V";
+            }
         }
 
         function getPhase() {
@@ -681,8 +473,7 @@
                 }
             } else {
                 if (!silentFail) {
-                    // Hiển thị alert bằng ngôn ngữ đã chọn
-                    alert(translations[currentLanguage]["alertMissingParams"]);
+                    alert('Vui lòng nhập đầy đủ và chính xác các thông số cần thiết!');
                 }
                 resultDiv.style.display = 'none';
             }
@@ -704,45 +495,48 @@
             calcHPFromKVAEffpF(true);
         }
 
+        // === HÀM MỚI: Ẩn tất cả các kết quả ===
         function clearAllResults() {
             document.querySelectorAll('.result').forEach(div => {
                 div.style.display = 'none';
             });
         }
 
+        // === HÀM MỚI: Reset tất cả inputs và Local Storage ===
         function resetAllInputs() {
+            // Xóa giá trị trong các ô input
             inputIds.forEach(id => {
                 document.getElementById(id).value = '';
-                localStorage.removeItem(id);
+                localStorage.removeItem(id); // Xóa khỏi Local Storage
             });
 
+            // Reset Phase về mặc định (3 Pha) và xóa khỏi Local Storage
             document.getElementById('phase3').checked = true;
             localStorage.removeItem('phase');
             
-            // Reset ngôn ngữ về mặc định (vi)
-            localStorage.removeItem('language');
-            document.getElementById('lang-select').value = 'vi';
-            setLanguage('vi'); // Phải gọi setLanguage để cập nhật lại text
-            
-            // updatePhaseBadges đã được gọi bên trong setLanguage('vi')
-            clearAllResults();
+            updatePhaseBadges(); // Cập nhật lại giao diện Phase
+            clearAllResults(); // Ẩn tất cả các kết quả
         }
 
+        // === HÀM MỚI: Lưu tất cả giá trị vào Local Storage ===
         function saveInputsToLocalStorage() {
             inputIds.forEach(id => {
                 localStorage.setItem(id, document.getElementById(id).value);
             });
             localStorage.setItem('phase', getPhase());
-            // Không cần lưu ngôn ngữ ở đây vì nó đã được lưu trong sự kiện onchange
         }
 
+        // === HÀM MỚI: Tải giá trị từ Local Storage khi mở trang ===
         function loadInputsFromLocalStorage() {
             // Tải Phase trước
             const savedPhase = localStorage.getItem('phase');
             if (savedPhase) {
+                // Đảm bảo radio button được chọn đúng
                 const phaseRadio = document.getElementById(savedPhase === '1' ? 'phase1' : 'phase3');
                 if (phaseRadio) phaseRadio.checked = true;
             }
+            // Cập nhật badges ngay sau khi tải Phase
+            updatePhaseBadges();
             
             // Tải các giá trị input khác
             inputIds.forEach(id => {
@@ -751,13 +545,8 @@
                     document.getElementById(id).value = savedValue;
                 }
             });
-            // Tải ngôn ngữ đã lưu, mặc định là 'vi'
-            const savedLang = localStorage.getItem('language') || 'vi';
-            document.getElementById('lang-select').value = savedLang;
-            setLanguage(savedLang); // Phải gọi setLanguage để áp dụng ngôn ngữ
 
-            // Tự động tính toán lại
-            // setLanguage() đã gọi updatePhaseBadges()
+            // Tự động tính toán lại dựa trên giá trị đã tải
             autoCalculateAll();
         }
 
@@ -980,6 +769,7 @@
         }
 
         // === GỌI HÀM TẢI DỮ LIỆU KHI TRANG MỞ ===
+        // Đặt ở cuối cùng để đảm bảo tất cả hàm đã được định nghĩa
         loadInputsFromLocalStorage();
 
     </script>
