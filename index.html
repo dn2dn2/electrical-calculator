@@ -209,11 +209,11 @@
             
             <div class="phase-selector">
                 <div class="phase-option">
-                    <input type="radio" id="phase1" name="phase" value="1" checked>
+                    <input type="radio" id="phase1" name="phase" value="1">
                     <label for="phase1">🔵 Mạng 1 Pha</label>
                 </div>
                 <div class="phase-option">
-                    <input type="radio" id="phase3" name="phase" value="3">
+                    <input type="radio" id="phase3" name="phase" value="3" checked>
                     <label for="phase3">🔴 Mạng 3 Pha</label>
                 </div>
             </div>
@@ -255,59 +255,9 @@
         </div>
 
         <div class="calculator-grid">
-            <!-- Tính kW -->
+            <!-- Tính Amperes -->
             <div class="card">
-                <h2>Tính kW (Kilowatts)</h2>
-                <button onclick="calcKwFromIVpF()">kW từ I, V, pF <span id="badge-kw-ivpf" class="phase-badge badge-1phase">1 Pha</span></button>
-                <div id="result-kw-ivpf" class="result" style="display:none;">
-                    <div class="result-label">Kết quả:</div>
-                    <div class="result-value"></div>
-                    <div class="formula"></div>
-                </div>
-
-                <button onclick="calcKwFromKVApF()">kW từ kVA, pF<span id="badge-kw-ivpf" class="phase-badge badge-1phase">1 Pha</span></button>
-                <div id="result-kw-kvapf" class="result" style="display:none;">
-                    <div class="result-label">Kết quả:</div>
-                    <div class="result-value"></div>
-                    <div class="formula">kW = kVA × pF</div>
-                </div>
-
-                <button onclick="calcKwFromHPEff()">kW từ HP, Eff<span id="badge-kw-ivpf" class="phase-badge badge-1phase">1 Pha</span></button>
-                <div id="result-kw-hpeff" class="result" style="display:none;">
-                    <div class="result-label">Kết quả:</div>
-                    <div class="result-value"></div>
-                    <div class="formula">kW = (HP × 0.746) / (Eff/100)</div>
-                </div>
-            </div>
-
-            <!-- Tính kVA -->
-            <div class="card">
-                <h2>Tính kVA (Kilovolt-Amperes)</h2>
-                <button onclick="calcKVAFromIV()">kVA từ I, V <span id="badge-kva-iv" class="phase-badge badge-1phase">1 Pha</span></button>
-                <div id="result-kva-iv" class="result" style="display:none;">
-                    <div class="result-label">Kết quả:</div>
-                    <div class="result-value"></div>
-                    <div class="formula"></div>
-                </div>
-
-                <button onclick="calcKVAFromKWpF()">kVA từ kW, pF<span id="badge-kw-ivpf" class="phase-badge badge-1phase">1 Pha</span></button>
-                <div id="result-kva-kwpf" class="result" style="display:none;">
-                    <div class="result-label">Kết quả:</div>
-                    <div class="result-value"></div>
-                    <div class="formula">kVA = kW / pF</div>
-                </div>
-
-                <button onclick="calcKVAFromHPEffpF()">kVA từ HP, Eff, pF<span id="badge-kw-ivpf" class="phase-badge badge-1phase">1 Pha</span></button>
-                <div id="result-kva-hpeffpf" class="result" style="display:none;">
-                    <div class="result-label">Kết quả:</div>
-                    <div class="result-value"></div>
-                    <div class="formula">kVA = (HP × 0.746) / (Eff/100 × pF)</div>
-                </div>
-            </div>
-
-            <!-- Tính A (Amperes) -->
-            <div class="card">
-                <h2>Tính I - Amperes (A)</h2>
+                <h2>Tính Amperes (A)</h2>
                 <button onclick="calcAFromKVA()">A từ kVA, V <span id="badge-a-kva" class="phase-badge badge-1phase">1 Pha</span></button>
                 <div id="result-a-kva" class="result" style="display:none;">
                     <div class="result-label">Kết quả:</div>
@@ -336,7 +286,65 @@
                     <div class="formula"></div>
                 </div>
             </div>
+			<!-- Tính kW -->
+            <div class="card">
+                <h2>Tính kW (Kilowatts)</h2>
+                <button onclick="calcKwFromIVpF()">kW từ I, V, pF <span id="badge-kw-ivpf" class="phase-badge badge-1phase">1 Pha</span></button>
+                <div id="result-kw-ivpf" class="result" style="display:none;">
+                    <div class="result-label">Kết quả:</div>
+                    <div class="result-value"></div>
+                    <div class="formula"></div>
+                </div>
 
+                <button onclick="calcKwFromKVApF()">kW từ kVA, pF<span id="badge-kw-ivpf" class="phase-badge badge-1phase">1 Pha</span></button>
+                <div id="result-kw-kvapf" class="result" style="display:none;">
+                    <div class="result-label">Kết quả:</div>
+                    <div class="result-value"></div>
+                    <div class="formula">kW = kVA × pF</div>
+                </div>
+
+                <button onclick="calcKwFromHPEff()">kW từ HP, Eff<span id="badge-kw-ivpf" class="phase-badge badge-1phase">1 Pha</span></button>
+                <div id="result-kw-hpeff" class="result" style="display:none;">
+                    <div class="result-label">Kết quả:</div>
+                    <div class="result-value"></div>
+                    <div class="formula">kW = (HP × 0.746) / (Eff/100)</div>
+                </div>
+            </div>
+			
+            <!-- Tính kVA -->
+            <div class="card">
+                <h2>Tính kVA (Kilovolt-Amperes)</h2>
+                <button onclick="calcKVAFromIV()">kVA từ I, V <span id="badge-kva-iv" class="phase-badge badge-1phase">1 Pha</span></button>
+                <div id="result-kva-iv" class="result" style="display:none;">
+                    <div class="result-label">Kết quả:</div>
+                    <div class="result-value"></div>
+                    <div class="formula"></div>
+                </div>
+
+                <button onclick="calcKVAFromKWpF()">kVA từ kW, pF<span id="badge-kw-ivpf" class="phase-badge badge-1phase">1 Pha</span></button>
+                <div id="result-kva-kwpf" class="result" style="display:none;">
+                    <div class="result-label">Kết quả:</div>
+                    <div class="result-value"></div>
+                    <div class="formula">kVA = kW / pF</div>
+                </div>
+
+                <button onclick="calcKVAFromHPEffpF()">kVA từ HP, Eff, pF<span id="badge-kw-ivpf" class="phase-badge badge-1phase">1 Pha</span></button>
+                <div id="result-kva-hpeffpf" class="result" style="display:none;">
+                    <div class="result-label">Kết quả:</div>
+                    <div class="result-value"></div>
+                    <div class="formula">kVA = (HP × 0.746) / (Eff/100 × pF)</div>
+                </div>
+            </div>
+			<!-- Tính kVAR -->
+            <div class="card">
+                <h2>Tính kVAR (Reactive Power)</h2>
+                <button onclick="calcKVARFromKWKVA()">kVAR từ kW, kVA<span id="badge-kw-ivpf" class="phase-badge badge-1phase">1 Pha</span></button>
+                <div id="result-kvar-kwkva" class="result" style="display:none;">
+                    <div class="result-label">Kết quả:</div>
+                    <div class="result-value"></div>
+                    <div class="formula">kVAR = √(kVA² - kW²)</div>
+                </div>
+            </div>
             <!-- Tính HP -->
             <div class="card">
                 <h2>Tính HP (Horsepower)</h2>
@@ -354,17 +362,7 @@
                     <div class="formula"></div>
                 </div>
             </div>
-
-            <!-- Tính kVAR -->
-            <div class="card">
-                <h2>Tính kVAR (Reactive Power)</h2>
-                <button onclick="calcKVARFromKWKVA()">kVAR từ kW, kVA<span id="badge-kw-ivpf" class="phase-badge badge-1phase">1 Pha</span></button>
-                <div id="result-kvar-kwkva" class="result" style="display:none;">
-                    <div class="result-label">Kết quả:</div>
-                    <div class="result-value"></div>
-                    <div class="formula">kVAR = √(kVA² - kW²)</div>
-                </div>
-            </div>
+            
         </div>
     </div>
 
