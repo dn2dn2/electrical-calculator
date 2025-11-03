@@ -637,7 +637,7 @@
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                ⚡THIETKETUDIEN.VN
+                ⚡ CÔNG CỤ ĐIỆN
             </div>
             <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
             <ul class="nav-menu" id="navMenu">
@@ -695,7 +695,7 @@
                         <input type="number" id="hp" step="0.01" placeholder="Nhập HP">
                     </div>
                     <div class="input-group">
-                        <label>H/S công suất (Cosφ - pF)</label>
+                        <label>Hệ số công suất (Cos φ - pF)</label>
                         <input type="number" id="pf" step="0.01" min="0" max="1" placeholder="0.8 - 1.0">
                     </div>
                     <div class="input-group">
@@ -986,77 +986,81 @@
                     <h2>🏭 Tính Toán Động Cơ</h2>
                     
                     <div class="input-grid">
-                        <div class="input-group">
-                            <label>Loại động cơ</label>
-                            <select id="motor-type">
-                                <option value="3phase">Động cơ 3 pha</option>
-                                <option value="1phase">Động cơ 1 pha</option>
-                            </select>
-                        </div>
+    <div class="input-group">
+        <label>Loại động cơ</label>
+        <select id="motor-type">
+            <option value="3phase">Động cơ 3 pha</option>
+            <option value="1phase">Động cơ 1 pha</option>
+        </select>
+    </div>
 
-                        <div class="input-group">
-                            <label>Công suất động cơ (HP hoặc kW)</label>
-                            <input type="number" id="motor-power" placeholder="Nhập công suất">
-                        </div>
+    <div class="input-group">
+        <label>Phương pháp khởi động</label>
+        <select id="motor-start-method" onchange="updateStartFactor()">
+            <option value="direct">Khởi động trực tiếp (DOL)</option>
+            <option value="star-delta">Khởi động sao - tam giác (Y-Δ)</option>
+        </select>
+    </div>
 
-                        <div class="input-group">
-                            <label>Đơn vị công suất</label>
-                            <select id="motor-unit">
-                                <option value="hp">HP (Horsepower)</option>
-                                <option value="kw">kW (Kilowatts)</option>
-                            </select>
-                        </div>
+    <div class="input-group">
+        <label>Công suất động cơ (HP hoặc kW)</label>
+        <input type="number" id="motor-power" placeholder="Nhập công suất">
+    </div>
 
-                        <div class="input-group">
-                            <label>Điện áp định mức (V)</label>
-                            <input type="number" id="motor-voltage" placeholder="220V / 380V" value="380">
-                            <div class="quick-select">
-                                <button class="quick-btn" onclick="setValue('motor-voltage', 220)">220V</button>
-                                <button class="quick-btn" onclick="setValue('motor-voltage', 380)">380V</button>
-                                <button class="quick-btn" onclick="setValue('motor-voltage', 400)">400V</button>
-                            </div>
-                        </div>
+    <div class="input-group">
+        <label>Đơn vị công suất</label>
+        <select id="motor-unit">
+            <option value="hp">HP (Horsepower)</option>
+            <option value="kw" selected>kW (Kilowatts)</option> </select>
+        </select>
+    </div>
 
-                        <div class="input-group">
-                            <label>Hiệu suất động cơ (%)</label>
-                            <input type="number" id="motor-eff" placeholder="80 - 95%" value="85" step="0.1">
-                            <div class="quick-select">
-                                <button class="quick-btn" onclick="setValue('motor-eff', 80)">80%</button>
-                                <button class="quick-btn" onclick="setValue('motor-eff', 85)">85%</button>
-                                <button class="quick-btn" onclick="setValue('motor-eff', 90)">90%</button>
-                                <button class="quick-btn" onclick="setValue('motor-eff', 92)">92%</button>
-                            </div>
-                        </div>
+    <div class="input-group">
+        <label>Điện áp định mức (V)</label>
+        <input type="number" id="motor-voltage" placeholder="220V / 380V" value="380">
+        <div class="quick-select">
+            <button class="quick-btn" onclick="setValue('motor-voltage', 220)">220V</button>
+            <button class="quick-btn" onclick="setValue('motor-voltage', 380)">380V</button>
+            <button class="quick-btn" onclick="setValue('motor-voltage', 400)">400V</button>
+        </div>
+    </div>
 
-                        <div class="input-group">
-                            <label>Hệ số công suất (cos φ)</label>
-                            <input type="number" id="motor-pf" placeholder="0.8 - 0.9" value="0.85" step="0.01">
-                            <div class="quick-select">
-                                <button class="quick-btn" onclick="setValue('motor-pf', 0.8)">0.8</button>
-                                <button class="quick-btn" onclick="setValue('motor-pf', 0.85)">0.85</button>
-                                <button class="quick-btn" onclick="setValue('motor-pf', 0.9)">0.9</button>
-                            </div>
-                        </div>
+    <div class="input-group">
+        <label>Hiệu suất động cơ (%)</label>
+        <input type="number" id="motor-eff" placeholder="80 - 95%" value="85" step="0.1">
+        <div class="quick-select">
+            <button class="quick-btn" onclick="setValue('motor-eff', 80)">80%</button>
+            <button class="quick-btn" onclick="setValue('motor-eff', 85)">85%</button>
+            <button class="quick-btn" onclick="setValue('motor-eff', 90)">90%</button>
+            <button class="quick-btn" onclick="setValue('motor-eff', 92)">92%</button>
+        </div>
+    </div>
 
-                        <div class="input-group">
-                            <label>Hệ số khởi động (%) <span class="info-badge">Optional</span></label>
-                            <input type="number" id="motor-start" placeholder="500 - 700%" value="600">
-                            <div class="quick-select">
-                                <button class="quick-btn" onclick="setValue('motor-start', 500)">500%</button>
-                                <button class="quick-btn" onclick="setValue('motor-start', 600)">600%</button>
-                                <button class="quick-btn" onclick="setValue('motor-start', 700)">700%</button>
-                            </div>
-                        </div>
+    <div class="input-group">
+        <label>Hệ số công suất (cos φ)</label>
+        <input type="number" id="motor-pf" placeholder="0.8 - 0.9" value="0.85" step="0.01">
+        <div class="quick-select">
+            <button class="quick-btn" onclick="setValue('motor-pf', 0.8)">0.8</button>
+            <button class="quick-btn" onclick="setValue('motor-pf', 0.85)">0.85</button>
+            <button class="quick-btn" onclick="setValue('motor-pf', 0.9)">0.9</button>
+        </div>
+    </div>
 
-                        <div class="input-group">
-                            <label>Tốc độ quay (rpm) <span class="info-badge">Optional</span></label>
-                            <input type="number" id="motor-speed" placeholder="1450 / 2900 rpm">
-                            <div class="quick-select">
-                                <button class="quick-btn" onclick="setValue('motor-speed', 1450)">1450</button>
-                                <button class="quick-btn" onclick="setValue('motor-speed', 2900)">2900</button>
-                            </div>
-                        </div>
-                    </div>
+    <div class="input-group">
+        <label>Hệ số khởi động (%)</label>
+        <input type="number" id="motor-start" value="600" readonly style="background: #f0f0f0;">
+        <div class="info-badge" style="margin-top: 5px;">Tự động theo phương pháp</div>
+    </div>
+
+    <div class="input-group">
+        <label>Tốc độ quay (rpm) <span class="info-badge">Optional</span></label>
+        <input type="number" id="motor-speed" placeholder="1450 / 2900 rpm">
+        <div class="quick-select">
+            <button class="quick-btn" onclick="setValue('motor-speed', 1450)">1450</button>
+            <button class="quick-btn" onclick="setValue('motor-speed', 2900)">2900</button>
+        </div>
+    </div>
+</div>
 
                     <button class="calc-btn" onclick="calculateMotor()">
                         🔍 TÍNH TOÁN ĐỘNG CƠ
@@ -1694,170 +1698,233 @@
             document.getElementById('cap-results-container').innerHTML = resultHTML;
             document.getElementById('cap-result').classList.remove('hidden');
         }
-
+		// Cập nhật hệ số khởi động
+		function updateStartFactor() {
+			const method = document.getElementById('motor-start-method').value;
+			const startInput = document.getElementById('motor-start');
+    
+			if (method === 'direct') {
+			startInput.value = 600; // DOL: 6 lần
+			} else {
+			startInput.value = 200; // Y-Δ: 2 lần
+				}
+				}
         // Tính động cơ
         function calculateMotor() {
-            const motorType = document.getElementById('motor-type').value;
-            let power = getVal('motor-power');
-            const unit = document.getElementById('motor-unit').value;
-            const voltage = getVal('motor-voltage');
-            const eff = getVal('motor-eff');
-            const pf = getVal('motor-pf');
-            const startFactor = getVal('motor-start') || 600;
-            const speed = getVal('motor-speed');
+    const motorType = document.getElementById('motor-type').value;
+    const startMethod = document.getElementById('motor-start-method').value;
+    let power = getVal('motor-power');
+    const unit = document.getElementById('motor-unit').value;
+    const voltage = getVal('motor-voltage');
+    const eff = getVal('motor-eff');
+    const pf = getVal('motor-pf');
+    const startFactor = getVal('motor-start') || 600;
+    const speed = getVal('motor-speed');
 
-            if (!power || !voltage || !eff || !pf) {
-                alert('Vui lòng nhập đầy đủ thông số cơ bản!');
-                return;
+    if (!power || !voltage || !eff || !pf) {
+        alert('Vui lòng nhập đầy đủ thông số cơ bản!');
+        return;
+    }
+
+    let powerKW = power;
+    let powerHP = power;
+    if (unit === 'hp') {
+        powerKW = power * 0.746;
+    } else {
+        powerHP = power / 0.746;
+    }
+
+    let ratedCurrent;
+    if (motorType === '3phase') {
+        ratedCurrent = (powerKW * 1000) / (Math.sqrt(3) * voltage * (eff / 100) * pf);
+    } else {
+        ratedCurrent = (powerKW * 1000) / (voltage * (eff / 100) * pf);
+    }
+
+    const startCurrent = ratedCurrent * (startFactor / 100);
+    const inputPower = powerKW / (eff / 100);
+
+    let torque = null;
+    if (speed) {
+        torque = (9550 * powerKW) / speed;
+    }
+
+    // Tính toán theo phương pháp
+    let cbRating, contactorRating;
+    let startMethodName, startMethodDesc;
+    let additionalEquipment = '';
+    
+    if (startMethod === 'direct') {
+        cbRating = Math.ceil(ratedCurrent * 1.25 / 5) * 5;
+        contactorRating = Math.ceil(ratedCurrent * 1.1 / 5) * 5;
+        startMethodName = 'Khởi động trực tiếp (DOL)';
+        startMethodDesc = 'Động cơ nối trực tiếp vào lưới, dòng khởi động lớn';
+        additionalEquipment = `
+            <tr>
+                <td><strong>Contactor chính</strong></td>
+                <td>${contactorRating} A</td>
+                <td>KM (AC3)</td>
+            </tr>
+        `;
+    } else {
+    // Hệ số Y-Δ chuẩn
+    const mainContactor = Math.ceil(ratedCurrent * 0.58 * 1.1 / 5) * 5; // KM (Main) = 0.58 × In
+    const starContactor = Math.ceil(ratedCurrent * 0.33 * 1.1 / 5) * 5; // KM1 (Y) = 0.33 × In
+    const deltaContactor = Math.ceil(ratedCurrent * 0.58 * 1.1 / 5) * 5; // KM2 (Δ) = 0.58 × In
+
+    cbRating = Math.ceil(ratedCurrent * 1.25 / 5) * 5;
+
+    // Rơ-le nhiệt đặt ở nhánh → 0.58 × In
+    const thermalRelayMin = (ratedCurrent * 0.58 * 0.7).toFixed(1);
+    const thermalRelayMax = (ratedCurrent * 0.58 * 1.1).toFixed(1);
+
+    startMethodName = 'Khởi động sao - tam giác (Y-Δ)';
+    startMethodDesc = 'KM Main ≈ 0.58×In, KM Star ≈ 0.33×In, KM Delta ≈ 0.58×In, OLR đặt nhánh = 0.58×In';
+
+    additionalEquipment = `
+        <tr>
+            <td><strong>Contactor Line (Main)</strong></td>
+            <td>${mainContactor} A</td>
+            <td>KM (AC-3)</td>
+        </tr>
+        <tr>
+            <td><strong>Contactor Delta (Δ)</strong></td>
+            <td>${deltaContactor} A</td>
+            <td>KD (AC-3)</td>
+        </tr>
+        <tr>
+            <td><strong>Contactor Star (Y)</strong></td>
+            <td>${starContactor} A</td>
+            <td>KY (AC-3)</td>
+        </tr>
+        <tr>
+            <td><strong>Rơ-le nhiệt (OLR)</strong></td>
+            <td>${thermalRelayMin} - ${thermalRelayMax} A</td>
+            <td>Rơ le nhiệt (đặt ở nhánh) - Có thể điều chỉnh</td>
+        </tr>
+        <tr>
+            <td><strong>Timer Relay</strong></td>
+            <td>3–30s</td>
+            <td>Thời gian Y→Δ</td>
+        </tr>
+    `;
+}
+
+
+    const thermalMin = ratedCurrent * 0.7;
+    const thermalMax = ratedCurrent * 1.1;
+
+    const resultHTML = `
+        <div class="success" style="margin-bottom: 20px;">
+            <strong>🔌 ${startMethodName}</strong><br>
+            ${startMethodDesc}
+        </div>
+
+        <div class="grid-2col">
+            <div>
+                <div class="result-title">⚡ Thông Số Điện</div>
+                <div class="result-item">
+                    <span class="result-label">Công suất:</span>
+                    <span class="result-value">${powerKW.toFixed(2)} kW / ${powerHP.toFixed(2)} HP</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Dòng định mức:</span>
+                    <span class="result-value">${ratedCurrent.toFixed(2)} A</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Dòng khởi động:</span>
+                    <span class="result-value">${startCurrent.toFixed(2)} A</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Công suất tiêu thụ:</span>
+                    <span class="result-value">${inputPower.toFixed(2)} kW</span>
+                </div>
+                ${torque ? `
+                <div class="result-item">
+                    <span class="result-label">Moment xoắn:</span>
+                    <span class="result-value">${torque.toFixed(2)} N·m</span>
+                </div>
+                ` : ''}
+            </div>
+
+            <div>
+                <div class="result-title">🔧 Thiết Bị Bảo Vệ</div>
+                <div class="result-item">
+                    <span class="result-label">CB/MCCB:</span>
+                    <span class="result-value">${cbRating} A</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Thermal Relay:</span>
+                    <span class="result-value">${thermalMin.toFixed(1)} - ${thermalMax.toFixed(1)} A</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-title" style="margin-top: 25px;">📊 Bảng Thiết Bị</div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Thiết bị</th>
+                        <th>Thông số</th>
+                        <th>Ghi chú</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Động cơ</strong></td>
+                        <td>${powerKW.toFixed(2)} kW / ${powerHP.toFixed(2)} HP</td>
+                        <td>${voltage}V, ${motorType === '3phase' ? '3 pha' : '1 pha'}${startMethod === 'star-delta' ? ', 6 đầu dây' : ''}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CB/MCCB</strong></td>
+                        <td>${cbRating} A</td>
+                        <td>380V, 3 pha</td>
+                    </tr>
+                    ${additionalEquipment}
+                    <tr>
+                        <td><strong>Thermal Relay</strong></td>
+                        <td>${thermalMin.toFixed(1)}-${thermalMax.toFixed(1)} A</td>
+                        <td>Rơ le nhiệt (đặt ở tổng) - Có thể điều chỉnh </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        ${startMethod === 'star-delta' ? `
+        <div class="warning" style="margin-top: 20px;">
+            <strong>⚠️ Điều kiện Y-Δ:</strong><br>
+            • Động cơ phải có 6 đầu dây<br>
+            • Chạy ở chế độ Δ với điện áp lưới<br>
+            • Từ 5HP (3.7kW) trở lên<br>
+            • Moment khởi động giảm 33%
+        </div>
+        ` : `
+        <div class="warning" style="margin-top: 20px;">
+            <strong>⚠️ Lưu ý DOL:</strong><br>
+            • Dòng khởi động 5-7 lần<br>
+            • Có thể gây sụt áp<br>
+            • Dùng cho động cơ < 5HP<br>
+            • Moment khởi động cao
+        </div>
+        `}
+
+        <div class="formula-box">
+            <strong>Công thức:</strong><br>
+            ${motorType === '3phase' ? 'I = P / (√3 × V × η × cosφ)' : 'I = P / (V × η × cosφ)'}<br>
+            ${startMethod === 'direct' ? 
+                'I<sub>start</sub> = 6 × I<sub>rated</sub> (DOL)' :
+                'I<sub>start</sub> = 2 × I<sub>rated</sub> (Y-Δ)'
             }
+        </div>
+    `;
 
-            let powerKW = power;
-            let powerHP = power;
-            if (unit === 'hp') {
-                powerKW = power * 0.746;
-            } else {
-                powerHP = power / 0.746;
-            }
-
-            let ratedCurrent;
-            if (motorType === '3phase') {
-                ratedCurrent = (powerKW * 1000) / (Math.sqrt(3) * voltage * (eff / 100) * pf);
-            } else {
-                ratedCurrent = (powerKW * 1000) / (voltage * (eff / 100) * pf);
-            }
-
-            const startCurrent = ratedCurrent * (startFactor / 100);
-            const inputPower = powerKW / (eff / 100);
-
-            let torque = null;
-            if (speed) {
-                torque = (9550 * powerKW) / speed;
-            }
-
-            const cbRating = Math.ceil(ratedCurrent * 1.25 / 5) * 5;
-            const contactorRating = Math.ceil(ratedCurrent * 1.1 / 5) * 5;
-            const thermalMin = ratedCurrent * 0.9;
-            const thermalMax = ratedCurrent * 1.1;
-
-            const resultHTML = `
-                <div class="grid-2col">
-                    <div>
-                        <div class="result-title">⚡ Thông Số Điện</div>
-                        <div class="result-item">
-                            <span class="result-label">Công suất:</span>
-                            <span class="result-value">${powerKW.toFixed(2)} kW / ${powerHP.toFixed(2)} HP</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Dòng định mức:</span>
-                            <span class="result-value">${ratedCurrent.toFixed(2)} A</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Dòng khởi động:</span>
-                            <span class="result-value">${startCurrent.toFixed(2)} A</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Công suất tiêu thụ:</span>
-                            <span class="result-value">${inputPower.toFixed(2)} kW</span>
-                        </div>
-                        ${torque ? `
-                        <div class="result-item">
-                            <span class="result-label">Moment xoắn:</span>
-                            <span class="result-value">${torque.toFixed(2)} N·m</span>
-                        </div>
-                        ` : ''}
-                    </div>
-
-                    <div>
-                        <div class="result-title">🔧 Thiết Bị Bảo Vệ</div>
-                        <div class="result-item">
-                            <span class="result-label">CB/MCCB:</span>
-                            <span class="result-value">${cbRating} A</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Contactor (MC):</span>
-                            <span class="result-value">${contactorRating} A</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Thermal Relay:</span>
-                            <span class="result-value">${thermalMin.toFixed(1)} - ${thermalMax.toFixed(1)} A</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="success" style="margin-top: 20px;">
-                    <strong>📋 Lưu ý lắp đặt:</strong><br>
-                    • CB/MCCB: Chọn từ ${cbRating}A (125% dòng định mức)<br>
-                    • Contactor: Chọn cấp tiếp theo >= ${contactorRating}A<br>
-                    • Thermal Relay: Điều chỉnh trong khoảng ${thermalMin.toFixed(1)}-${thermalMax.toFixed(1)}A<br>
-                    • Hệ số khởi động: ${startFactor}% (${(startFactor/100).toFixed(1)} lần dòng định mức)<br>
-                    • Tiết diện dây: Cần tính toán riêng dựa trên chiều dài, môi trường lắp đặt
-                </div>
-
-                <div class="result-title" style="margin-top: 25px;">📊 Bảng Tóm Tắt</div>
-                <div class="table-responsive">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Thiết bị</th>
-                                <th>Thông số</th>
-                                <th>Ghi chú</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Động cơ</strong></td>
-                                <td>${powerKW.toFixed(2)} kW / ${powerHP.toFixed(2)} HP</td>
-                                <td>${voltage}V, ${motorType === '3phase' ? '3 pha' : '1 pha'}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>CB/MCCB</strong></td>
-                                <td>${cbRating} A</td>
-                                <td>Đặc tính C hoặc D</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Contactor</strong></td>
-                                <td>${contactorRating} A</td>
-                                <td>AC-3 (động cơ)</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Thermal Relay</strong></td>
-                                <td>${thermalMin.toFixed(1)}-${thermalMax.toFixed(1)} A</td>
-                                <td>Có thể điều chỉnh</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="formula-box">
-                    <strong>Công thức tính toán:</strong><br>
-                    ${motorType === '3phase' ? 
-                        'I = P / (√3 × V × η × cosφ) (3 pha)<br>' :
-                        'I = P / (V × η × cosφ) (1 pha)<br>'
-                    }
-                    I_khởi động = I_định mức × K (K = ${startFactor/100})<br>
-                    ${speed ? 'T = 9550 × P / n (N·m)<br>' : ''}
-                    CB = 1.25 × I_định mức (tối thiểu)
-                </div>
-
-                <div class="warning" style="margin-top: 15px;">
-                    <strong>⚠️ Cảnh báo an toàn:</strong><br>
-                    • Kiểm tra điện áp nguồn trước khi khởi động<br>
-                    • Đảm bảo nối đất tốt cho vỏ động cơ<br>
-                    • Không khởi động liên tục quá 3 lần trong 1 giờ<br>
-                    • Kiểm tra nhiệt độ động cơ trong quá trình vận hành<br>
-                    • Bảo dưỡng định kỳ theo hướng dẫn nhà sản xuất
-                </div>
-            `;
-
-            document.getElementById('motor-results-container').innerHTML = resultHTML;
-            document.getElementById('motor-result').classList.remove('hidden');
-        }
+    document.getElementById('motor-results-container').innerHTML = resultHTML;
+    document.getElementById('motor-result').classList.remove('hidden');
+}
 
         // Load data on page load
         loadInputsFromLocalStorage();
     </script>
 </body>
 </html>
-
-
-
