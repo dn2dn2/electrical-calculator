@@ -695,7 +695,7 @@
                         <input type="number" id="hp" step="0.01" placeholder="Nhập HP">
                     </div>
                     <div class="input-group">
-                        <label>H/s công suất (Cos φ - pF)</label>
+                        <label>H/số công suất (Cos φ - pF)</label>
                         <input type="number" id="pf" step="0.01" min="0" max="1" placeholder="0.8 - 1.0">
                     </div>
                     <div class="input-group">
@@ -1710,7 +1710,8 @@
 				}
 				}
         // Tính động cơ
-        function calculateMotor() {
+        // Tính động cơ
+function calculateMotor() {
     const motorType = document.getElementById('motor-type').value;
     const startMethod = document.getElementById('motor-start-method').value;
     let power = getVal('motor-power');
@@ -1749,16 +1750,23 @@
         torque = (9550 * powerKW) / speed;
     }
 
-    // Tính toán theo phương pháp
-    let cbRating, contactorRating;
+    // --- BẮT ĐẦU SỬA LỖI LOGIC ---
+
+    // 1. Khai báo biến ở phạm vi ngoài
+    let cbRating;
     let startMethodName, startMethodDesc;
     let additionalEquipment = '';
-    
+    let thermalMin, thermalMax; // Biến OLR chung
+
     if (startMethod === 'direct') {
+        // --- LOGIC CHO DOL (KHỞI ĐỘNG TRỰC TIẾP) ---
+        
         cbRating = Math.ceil(ratedCurrent * 1.25 / 5) * 5;
-        contactorRating = Math.ceil(ratedCurrent * 1.1 / 5) * 5;
+        const contactorRating = Math.ceil(ratedCurrent * 1.1 / 5) * 5;
+        
         startMethodName = 'Khởi động trực tiếp (DOL)';
         startMethodDesc = 'Động cơ nối trực tiếp vào lưới, dòng khởi động lớn';
+        
         additionalEquipment = `
             <tr>
                 <td><strong>Contactor chính</strong></td>
@@ -1766,54 +1774,62 @@
                 <td>KM (AC3)</td>
             </tr>
         `;
+
+        // 2. Tính OLR cho DOL (đặt ở tổng, 100% dòng định mức)
+        thermalMin = ratedCurrent * 0.7;
+        thermalMax = ratedCurrent * 1.1;
+
     } else {
-    // Hệ số Y-Δ chuẩn
-    const mainContactor = Math.ceil(ratedCurrent * 0.58 * 1.1 / 5) * 5; // KM (Main) = 0.58 × In
-    const starContactor = Math.ceil(ratedCurrent * 0.33 * 1.1 / 5) * 5; // KM1 (Y) = 0.33 × In
-    const deltaContactor = Math.ceil(ratedCurrent * 0.58 * 1.1 / 5) * 5; // KM2 (Δ) = 0.58 × In
+        // --- LOGIC CHO Y-Δ (SAO-TAM GIÁC) ---
+        
+        // Hệ số Y-Δ chuẩn
+        const mainContactor = Math.ceil(ratedCurrent * 0.58 * 1.1 / 5) * 5; // KM (Main) = 0.58 × In
+        const starContactor = Math.ceil(ratedCurrent * 0.33 * 1.1 / 5) * 5; // KM1 (Y) = 0.33 × In
+        const deltaContactor = Math.ceil(ratedCurrent * 0.58 * 1.1 / 5) * 5; // KM2 (Δ) = 0.58 × In
 
-    cbRating = Math.ceil(ratedCurrent * 1.25 / 5) * 5;
+        cbRating = Math.ceil(ratedCurrent * 1.25 / 5) * 5;
 
-    // Rơ-le nhiệt đặt ở nhánh → 0.58 × In
-    const thermalRelayMin = (ratedCurrent * 0.58 * 0.7).toFixed(1);
-    const thermalRelayMax = (ratedCurrent * 0.58 * 1.1).toFixed(1);
+        // 2. Tính OLR cho Y-Δ (đặt ở nhánh, 58% dòng định mức)
+        // 
+        thermalMin = ratedCurrent * 0.58 * 0.7;
+        thermalMax = ratedCurrent * 0.58 * 1.1;
 
-    startMethodName = 'Khởi động sao - tam giác (Y-Δ)';
-    startMethodDesc = 'KM Main ≈ 0.58×In, KM Star ≈ 0.33×In, KM Delta ≈ 0.58×In, OLR đặt nhánh = 0.58×In';
+        startMethodName = 'Khởi động sao - tam giác (Y-Δ)';
+        startMethodDesc = 'KM Main ≈ 0.58×In, KM Star ≈ 0.33×In, KM Delta ≈ 0.58×In, OLR đặt nhánh = 0.58×In';
 
-    additionalEquipment = `
-        <tr>
-            <td><strong>Contactor Line (Main)</strong></td>
-            <td>${mainContactor} A</td>
-            <td>KM (AC-3)</td>
-        </tr>
-        <tr>
-            <td><strong>Contactor Delta (Δ)</strong></td>
-            <td>${deltaContactor} A</td>
-            <td>KD (AC-3)</td>
-        </tr>
-        <tr>
-            <td><strong>Contactor Star (Y)</strong></td>
-            <td>${starContactor} A</td>
-            <td>KY (AC-3)</td>
-        </tr>
-        <tr>
-            <td><strong>Rơ-le nhiệt (OLR)</strong></td>
-            <td>${thermalRelayMin} - ${thermalRelayMax} A</td>
-            <td>Rơ le nhiệt (đặt ở nhánh) - Có thể điều chỉnh</td>
-        </tr>
-        <tr>
-            <td><strong>Timer Relay</strong></td>
-            <td>3–30s</td>
-            <td>Thời gian Y→Δ</td>
-        </tr>
-    `;
-}
+        // 3. Bảng thiết bị Y-Δ (ĐÃ XÓA RƠ LE NHIỆT KHỎI ĐÂY)
+        additionalEquipment = `
+            <tr>
+                <td><strong>Contactor Line (Main)</strong></td>
+                <td>${mainContactor} A</td>
+                <td>KM (AC-3)</td>
+            </tr>
+            <tr>
+                <td><strong>Contactor Delta (Δ)</strong></td>
+                <td>${deltaContactor} A</td>
+                <td>KD (AC-3)</td>
+            </tr>
+            <tr>
+                <td><strong>Contactor Star (Y)</strong></td>
+                <td>${starContactor} A</td>
+                <td>KY (AC-3)</td>
+            </tr>
+            <tr>
+                <td><strong>Timer Relay</strong></td>
+                <td>3–30s</td>
+                <td>Thời gian Y→Δ</td>
+            </tr>
+        `;
+    }
+
+    // 4. XÓA BỎ PHÉP TÍNH OLR 100% THỪA Ở ĐÂY
+    // const thermalMin = ratedCurrent * 0.7;  <-- ĐÃ XÓA
+    // const thermalMax = ratedCurrent * 1.1;  <-- ĐÃ XÓA
+
+    // --- KẾT THÚC SỬA LỖI LOGIC ---
 
 
-    const thermalMin = ratedCurrent * 0.7;
-    const thermalMax = ratedCurrent * 1.1;
-
+    // 5. HTML kết quả (Giờ đây sẽ hiển thị đúng OLR cho cả 2 trường hợp)
     const resultHTML = `
         <div class="success" style="margin-bottom: 20px;">
             <strong>🔌 ${startMethodName}</strong><br>
@@ -1881,11 +1897,13 @@
                         <td>${cbRating} A</td>
                         <td>380V, 3 pha</td>
                     </tr>
-                    ${additionalEquipment}
+                    
+                    ${additionalEquipment} 
+                    
                     <tr>
                         <td><strong>Thermal Relay</strong></td>
                         <td>${thermalMin.toFixed(1)}-${thermalMax.toFixed(1)} A</td>
-                        <td>Rơ le nhiệt (đặt ở tổng) - Có thể điều chỉnh </td>
+                        <td>${startMethod === 'star-delta' ? 'Rơ le nhiệt (đặt ở nhánh 58%)' : 'Rơ le nhiệt (đặt ở tổng 100%)'}</td>
                     </tr>
                 </tbody>
             </table>
@@ -1897,7 +1915,8 @@
             • Động cơ phải có 6 đầu dây<br>
             • Chạy ở chế độ Δ với điện áp lưới<br>
             • Từ 5HP (3.7kW) trở lên<br>
-            • Moment khởi động giảm 33%
+            • Moment khởi động giảm 33%<br>
+            • OLR nên đặt ở nhánh (tính 58% I<sub>dm</sub>)
         </div>
         ` : `
         <div class="warning" style="margin-top: 20px;">
@@ -1928,5 +1947,3 @@
     </script>
 </body>
 </html>
-
-
