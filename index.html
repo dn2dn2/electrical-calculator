@@ -1799,7 +1799,7 @@ function calculateMotor() {
         `;
 
         // Tính OLR cho DOL (đặt ở tổng, 100% dòng định mức)
-        thermalMin = ratedCurrent * 0.7;
+        thermalMin = ratedCurrent * 0.9;
         thermalMax = ratedCurrent * 1.1;
 
     } else {
@@ -1812,7 +1812,7 @@ function calculateMotor() {
         cbRating = Math.ceil(ratedCurrent * 1.25 / 5) * 5;
 
         // Tính OLR cho Y-Δ (đặt ở nhánh, 58% dòng định mức)
-        thermalMin = ratedCurrent * 0.58 * 0.7;
+        thermalMin = ratedCurrent * 0.58 * 0.9;
         thermalMax = ratedCurrent * 0.58 * 1.1;
 
         startMethodName = 'Khởi động sao - tam giác (Y-Δ)';
@@ -1960,3 +1960,4 @@ function calculateMotor() {
     </script>
 </body>
 </html>
+
