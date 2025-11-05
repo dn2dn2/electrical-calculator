@@ -1225,7 +1225,23 @@
                 resultDiv.style.display = 'none';
             }
         }
+// --- BỔ SUNG LOGIC MỚI: TỰ ĐỘNG CẬP NHẬT PHƯƠNG PHÁP KHỞI ĐỘNG ---
+document.getElementById('motor-type').addEventListener('change', function() {
+    const motorType = this.value;
+    const startMethodSelect = document.getElementById('motor-start-method');
+    const starDeltaOption = startMethodSelect.querySelector('option[value="star-delta"]');
 
+    if (motorType === '1phase') {
+        // Nếu chọn 1 pha:
+        startMethodSelect.value = 'direct'; // Bắt buộc chọn DOL
+        starDeltaOption.disabled = true;  // Vô hiệu hóa tùy chọn Y-Δ
+        updateStartFactor(); // Cập nhật hệ số khởi động về 600%
+    } else {
+        // Nếu chọn 3 pha:
+        starDeltaOption.disabled = false; // Kích hoạt lại tùy chọn Y-Δ
+    }
+});
+// --- KẾT THÚC BỔ SUNG LOGIC MỚI ---
         function autoCalculateAll() {
             calcAFromKVA(true);
             calcAFromKW(true);
@@ -1711,16 +1727,24 @@
 				}
         // Tính động cơ
         // Tính động cơ
+// Tính động cơ
 function calculateMotor() {
     const motorType = document.getElementById('motor-type').value;
-    const startMethod = document.getElementById('motor-start-method').value;
+    let startMethod = document.getElementById('motor-start-method').value; // Đổi thành 'let'
     let power = getVal('motor-power');
     const unit = document.getElementById('motor-unit').value;
     const voltage = getVal('motor-voltage');
     const eff = getVal('motor-eff');
     const pf = getVal('motor-pf');
-    const startFactor = getVal('motor-start') || 600;
+    let startFactor = getVal('motor-start') || 600; // Đổi thành 'let'
     const speed = getVal('motor-speed');
+
+    // --- LOGIC MỚI: BẮT BUỘC DOL CHO 1 PHA ---
+    if (motorType === '1phase') {
+        startMethod = 'direct'; // Bắt buộc là DOL
+        startFactor = 600;      // Bắt buộc hệ số 600%
+    }
+    // --- KẾT THÚC LOGIC MỚI ---
 
     if (!power || !voltage || !eff || !pf) {
         alert('Vui lòng nhập đầy đủ thông số cơ bản!');
@@ -1742,6 +1766,7 @@ function calculateMotor() {
         ratedCurrent = (powerKW * 1000) / (voltage * (eff / 100) * pf);
     }
 
+    // Tính lại dòng khởi động sau khi đã ép hệ số (nếu cần)
     const startCurrent = ratedCurrent * (startFactor / 100);
     const inputPower = powerKW / (eff / 100);
 
@@ -1750,16 +1775,14 @@ function calculateMotor() {
         torque = (9550 * powerKW) / speed;
     }
 
-    // --- BẮT ĐẦU SỬA LỖI LOGIC ---
-
-    // 1. Khai báo biến ở phạm vi ngoài
+    // (Đây là logic đã sửa lỗi từ lần trước)
     let cbRating;
     let startMethodName, startMethodDesc;
     let additionalEquipment = '';
     let thermalMin, thermalMax; // Biến OLR chung
 
     if (startMethod === 'direct') {
-        // --- LOGIC CHO DOL (KHỞI ĐỘNG TRỰC TIẾP) ---
+        // --- LOGIC CHO DOL (Sẽ luôn đúng cho 1 pha) ---
         
         cbRating = Math.ceil(ratedCurrent * 1.25 / 5) * 5;
         const contactorRating = Math.ceil(ratedCurrent * 1.1 / 5) * 5;
@@ -1775,29 +1798,26 @@ function calculateMotor() {
             </tr>
         `;
 
-        // 2. Tính OLR cho DOL (đặt ở tổng, 100% dòng định mức)
+        // Tính OLR cho DOL (đặt ở tổng, 100% dòng định mức)
         thermalMin = ratedCurrent * 0.7;
         thermalMax = ratedCurrent * 1.1;
 
     } else {
-        // --- LOGIC CHO Y-Δ (SAO-TAM GIÁC) ---
+        // --- LOGIC CHO Y-Δ (Giờ đây chỉ chạy cho 3 pha) ---
         
-        // Hệ số Y-Δ chuẩn
-        const mainContactor = Math.ceil(ratedCurrent * 0.58 * 1.1 / 5) * 5; // KM (Main) = 0.58 × In
-        const starContactor = Math.ceil(ratedCurrent * 0.33 * 1.1 / 5) * 5; // KM1 (Y) = 0.33 × In
-        const deltaContactor = Math.ceil(ratedCurrent * 0.58 * 1.1 / 5) * 5; // KM2 (Δ) = 0.58 × In
+        const mainContactor = Math.ceil(ratedCurrent * 0.58 * 1.1 / 5) * 5;
+        const starContactor = Math.ceil(ratedCurrent * 0.33 * 1.1 / 5) * 5;
+        const deltaContactor = Math.ceil(ratedCurrent * 0.58 * 1.1 / 5) * 5;
 
         cbRating = Math.ceil(ratedCurrent * 1.25 / 5) * 5;
 
-        // 2. Tính OLR cho Y-Δ (đặt ở nhánh, 58% dòng định mức)
-        // 
+        // Tính OLR cho Y-Δ (đặt ở nhánh, 58% dòng định mức)
         thermalMin = ratedCurrent * 0.58 * 0.7;
         thermalMax = ratedCurrent * 0.58 * 1.1;
 
         startMethodName = 'Khởi động sao - tam giác (Y-Δ)';
         startMethodDesc = 'KM Main ≈ 0.58×In, KM Star ≈ 0.33×In, KM Delta ≈ 0.58×In, OLR đặt nhánh = 0.58×In';
 
-        // 3. Bảng thiết bị Y-Δ (ĐÃ XÓA RƠ LE NHIỆT KHỎI ĐÂY)
         additionalEquipment = `
             <tr>
                 <td><strong>Contactor Line (Main)</strong></td>
@@ -1822,14 +1842,7 @@ function calculateMotor() {
         `;
     }
 
-    // 4. XÓA BỎ PHÉP TÍNH OLR 100% THỪA Ở ĐÂY
-    // const thermalMin = ratedCurrent * 0.7;  <-- ĐÃ XÓA
-    // const thermalMax = ratedCurrent * 1.1;  <-- ĐÃ XÓA
-
-    // --- KẾT THÚC SỬA LỖI LOGIC ---
-
-
-    // 5. HTML kết quả (Giờ đây sẽ hiển thị đúng OLR cho cả 2 trường hợp)
+    // Tạo HTML kết quả
     const resultHTML = `
         <div class="success" style="margin-bottom: 20px;">
             <strong>🔌 ${startMethodName}</strong><br>
@@ -1895,7 +1908,7 @@ function calculateMotor() {
                     <tr>
                         <td><strong>CB/MCCB</strong></td>
                         <td>${cbRating} A</td>
-                        <td>380V, 3 pha</td>
+                        <td>${motorType === '3phase' ? `${voltage}V, 3 pha` : `${voltage}V, 2P (1 pha)`}</td>
                     </tr>
                     
                     ${additionalEquipment} 
