@@ -1,3 +1,9 @@
 User-agent: *
 Allow: /
+
+# Ngăn chặn bot không cần thiết
+Disallow: /private/
+Disallow: /temp/
+
+# Khai báo sitemap để Google nhận diện
 Sitemap: https://tools.thietketudien.vn/sitemap.xml
