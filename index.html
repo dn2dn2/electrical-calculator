@@ -1207,6 +1207,8 @@
         function updatePhaseBadges() {
             const phase = getPhase();
             const badges = document.querySelectorAll('.phase-badge');
+            
+            // 1. Cập nhật hiển thị Badge (như cũ)
             badges.forEach(badge => {
                 if (phase === 3) {
                     badge.textContent = '3 Pha';
@@ -1216,6 +1218,19 @@
                     badge.className = 'phase-badge badge-1phase';
                 }
             });
+
+            // 2. === PHẦN MỚI: TỰ ĐỘNG ĐIỀN ĐIỆN ÁP ===
+            const voltageInput = document.getElementById('voltage');
+            if (phase === 3) {
+                voltageInput.value = 380; // Tự điền số 380
+            } else {
+                voltageInput.value = 220; // Tự điền số 220
+            }
+            
+            // 3. Kích hoạt tính toán lại ngay lập tức (nếu đang bật tự động cập nhật)
+             if (document.getElementById('autoUpdate').checked) {
+                autoCalculateAll();
+            }
         }
 
         function getPhase() {
@@ -1977,6 +1992,7 @@ function calculateMotor() {
     </script>
 </body>
 </html>
+
 
 
 
