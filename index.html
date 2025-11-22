@@ -665,10 +665,10 @@
 		</div>
             <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
             <ul class="nav-menu" id="navMenu">
-                <li><button class="nav-link active" onclick="showSection('basic')">🔧 Tính Toán Cơ Bản</button></li>
-                <li><button class="nav-link" onclick="showSection('advanced')">⚙️ Tính Toán Nâng Cao</button></li>
-				<li><button class="nav-link" onclick="showSection('plc')">🖥️ Analog Scaling</button></li>
-				<li><button class="nav-link" onclick="showSection('about')">📖 Giới Thiệu</button></li>
+                <li><button class="nav-link active" onclick="showSection('basic')">Tính Toán Cơ Bản</button></li>
+                <li><button class="nav-link" onclick="showSection('advanced')">Tính Toán Nâng Cao</button></li>
+				<li><button class="nav-link" onclick="showSection('plc')">Analog Scaling</button></li>
+				<li><button class="nav-link" onclick="showSection('about')">Giới Thiệu</button></li>
             </ul>
         </div>
     </nav>
@@ -1153,21 +1153,21 @@
                     </h2>
 
                     <div class="params-grid" style="max-width:900px; margin:0 auto 40px;">
-                        <div class="input-group"><label>Raw Min (e.g: 4mA)</label><input type="number" id="rawMin" value="0"></div>
-                        <div class="input-group"><label>Raw Max (e.g: 20mA)</label><input type="number" id="rawMax" value="27648"></div>
-                        <div class="input-group"><label>Giá trị thực Min (e.g: 0 Bar)</label><input type="number" step="any" id="euMin" value="0"></div>
-                        <div class="input-group"><label>Giá trị thực Max (e.g: 10 Bar)</label><input type="number" step="any" id="euMax" value="100"></div>
-                        <div class="input-group"><label>Đơn vị</label><input type="text" id="calcUnit" value="bar" placeholder="bar, °C, m³/h..."></div>
+                        <div class="input-group"><label>Ngõ ra Min (e.g: 4mA)</label><input type="number" id="rawMin" value="0"></div>
+                        <div class="input-group"><label>Ngõ ra Max (e.g: 20mA)</label><input type="number" id="rawMax" value="27648"></div>
+                        <div class="input-group"><label>Dải đo Min (e.g: 0 bar)</label><input type="number" step="any" id="euMin" value="0"></div>
+                        <div class="input-group"><label>Dải đo thực Max (e.g: 10 bar)</label><input type="number" step="any" id="euMax" value="100"></div>
+                        <div class="input-group"><label>Đơn vị (e.g: bar, °C, m³/h,... </label><input type="text" id="calcUnit" value="bar" placeholder="bar, °C, m³/h..."></div>
                     </div>
 
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:40px; max-width:1000px; margin:0 auto 40px;">
                         <div class="card" style="padding:35px; text-align:center; background:#e3f2fd; border-radius:18px;">
-                            <h3 style="color:#1976d2; font-size:1.5em; margin-bottom:20px;">Raw (e.g: 20 mA) → Giá trị thực (e.g: 10 Bar)</h3>
+                            <h3 style="color:#1976d2; font-size:1.5em; margin-bottom:20px;">Ngõ ra (e.g: 20 mA) → Dải đo (e.g: 10 Bar)</h3>
                             <input type="number" id="inputRaw" placeholder="Ví dụ: 13824" style="width:100%; padding:15px; font-size:1.3em; text-align:center; border-radius:12px; border:2px solid #90caf9;">
                             <div id="resultEU" style="margin-top:20px; font-size:3em; font-weight:bold; color:#1976d2;">-</div>
                         </div>
                         <div class="card" style="padding:35px; text-align:center; background:#e8f5e8; border-radius:18px;">
-                            <h3 style="color:#388e3c; font-size:1.5em; margin-bottom:20px;">Giá trị thực (e.g: 10 Bar)→ Raw (e.g: 20 mA)</h3>
+                            <h3 style="color:#388e3c; font-size:1.5em; margin-bottom:20px;">Dải đo (e.g: 10 Bar)→ Ngõ ra (e.g: 20 mA)</h3>
                             <input type="number" step="any" id="inputEU" placeholder="Ví dụ: 75" style="width:100%; padding:15px; font-size:1.3em; text-align:center; border-radius:12px; border:2px solid #a5d6a7;">
                             <div id="resultRaw" style="margin-top:20px; font-size:3em; font-weight:bold; color:#388e3c;">-</div>
                         </div>
@@ -2174,19 +2174,19 @@ function calculateMotor() {
         if (!isNaN(inputRaw)) {
             let eu = euMin + (inputRaw - rawMin) * (euMax - euMin) / (rawMax - rawMin);
             eu = Math.max(euMin, Math.min(euMax, eu));
-            document.getElementById('resultEU').textContent = eu.toFixed(3) + ' ' + unit;
+            document.getElementById('resultEU').textContent = eu.toFixed(2) + ' ' + unit;
         } else {
             document.getElementById('resultEU').textContent = '-';
         }
 
-        // EU → Raw
-        if (!isNaN(inputEU)) {
-            let raw = rawMin + (inputEU - euMin) * (rawMax - rawMin) / (euMax - euMin);
-            raw = Math.max(rawMin, Math.min(rawMax, Math.round(raw)));
-            document.getElementById('resultRaw').textContent = raw;
-        } else {
-            document.getElementById('resultRaw').textContent = '-';
-        }
+        // EU → Raw: BÂY GIỜ ĐẸP HOÀN HẢO, CÓ SỐ LẺ!
+            if (!isNaN(inputEU)) {
+                let raw = rawMin + (inputEU - euMin) * (rawMax - rawMin) / (euMax - euMin);
+                raw = Math.max(rawMin, Math.min(rawMax, raw)); // ← Không làm tròn
+                document.getElementById('resultRaw').textContent = raw.toFixed(2); // ← Ra số lẻ: 50.45, 75.32...
+            } else {
+                document.getElementById('resultRaw').textContent = '-';
+            }
 
         // Bảng nhanh
         [0,25,50,75,100].forEach(p => {
