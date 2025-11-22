@@ -666,8 +666,9 @@
             <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
             <ul class="nav-menu" id="navMenu">
                 <li><button class="nav-link active" onclick="showSection('basic')">🔧 Tính Toán Cơ Bản</button></li>
-                <li><button class="nav-link" onclick="showSection('advanced')">⚙️ Tính Toán Nâng Cao</button></li>
-                <li><button class="nav-link" onclick="showSection('about')">📖 Giới Thiệu</button></li>
+                <li><button class="nav-link" onclick="showSection('advanced')">Tính Toán Nâng Cao</button></li>
+				<li><button class="nav-link" onclick="showSection('plc')">Analog Scaling</button></li>
+				<li><button class="nav-link" onclick="showSection('about')">Giới Thiệu</button></li>
             </ul>
         </div>
     </nav>
@@ -1138,6 +1139,74 @@
             </div>
         </div>
     </div> <!-- kết thúc .container -->
+        <!-- SECTION: ANALOG SCALING CALCULATOR-->
+        <div id="plc" class="section">
+            <div class="header">
+                <h1>Analog Scaling Calculator</h1>
+                <p>Chuyển đổi 4-20mA • PT100 • Cảm biến áp suất, lưu lượng, mức nước...</p>
+            </div>
+
+            <div class="container">
+                <div class="card" style="padding:50px 40px; background:linear-gradient(135deg,#f8f9ff,#eef2ff); border-radius:20px; box-shadow:0 20px 50px rgba(0,0,0,0.25);">
+                    <h2 style="text-align:center; font-size:2.3em; margin-bottom:35px; color:#667eea;">
+                        Analog Scaling (Raw ↔ Giá trị thực)
+                    </h2>
+
+                    <div class="params-grid" style="max-width:900px; margin:0 auto 40px;">
+                        <div class="input-group"><label>Raw Min (e.g: 4mA)</label><input type="number" id="rawMin" value="0"></div>
+                        <div class="input-group"><label>Raw Max (e.g: 20mA)</label><input type="number" id="rawMax" value="27648"></div>
+                        <div class="input-group"><label>Giá trị thực Min (e.g: 0 Bar)</label><input type="number" step="any" id="euMin" value="0"></div>
+                        <div class="input-group"><label>Giá trị thực Max (e.g: 10 Bar)</label><input type="number" step="any" id="euMax" value="100"></div>
+                        <div class="input-group"><label>Đơn vị</label><input type="text" id="calcUnit" value="bar" placeholder="bar, °C, m³/h..."></div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:40px; max-width:1000px; margin:0 auto 40px;">
+                        <div class="card" style="padding:35px; text-align:center; background:#e3f2fd; border-radius:18px;">
+                            <h3 style="color:#1976d2; font-size:1.5em; margin-bottom:20px;">Raw (e.g: 20 mA) → Giá trị thực (e.g: 10 Bar)</h3>
+                            <input type="number" id="inputRaw" placeholder="Ví dụ: 13824" style="width:100%; padding:15px; font-size:1.3em; text-align:center; border-radius:12px; border:2px solid #90caf9;">
+                            <div id="resultEU" style="margin-top:20px; font-size:3em; font-weight:bold; color:#1976d2;">-</div>
+                        </div>
+                        <div class="card" style="padding:35px; text-align:center; background:#e8f5e8; border-radius:18px;">
+                            <h3 style="color:#388e3c; font-size:1.5em; margin-bottom:20px;">Giá trị thực (e.g: 10 Bar)→ Raw (e.g: 20 mA)</h3>
+                            <input type="number" step="any" id="inputEU" placeholder="Ví dụ: 75" style="width:100%; padding:15px; font-size:1.3em; text-align:center; border-radius:12px; border:2px solid #a5d6a7;">
+                            <div id="resultRaw" style="margin-top:20px; font-size:3em; font-weight:bold; color:#388e3c;">-</div>
+                        </div>
+                    </div>
+
+                    <div style="max-width:1000px; margin:0 auto;">
+                        <h3 style="text-align:center; color:#667eea; margin-bottom:25px; font-size:1.6em;">Preset cảm biến phổ biến (1 click)</h3>
+                        <div class="calculator-grid">
+                            <button class="quick-btn" onclick="setPreset(0,27648,0,10,'bar')">0-10 bar</button>
+                            <button class="quick-btn" onclick="setPreset(0,27648,0,16,'bar')">0-16 bar</button>
+                            <button class="quick-btn" onclick="setPreset(0,27648,0,25,'bar')">0-25 bar</button>
+                            <button class="quick-btn" onclick="setPreset(6241,31208,-50,200,'°C')">PT100: -50→200°C</button>
+                            <button class="quick-btn" onclick="setPreset(0,27648,0,100,'m³/h')">Lưu lượng: 0-100 m³/h</button>
+                            <button class="quick-btn" onclick="setPreset(0,27648,0,5,'m')">Mức nước: 0-5m</button>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:50px; max-width:800px; margin-left:auto; margin-right:auto;">
+                        <div class="card" style="padding:25px;">
+                            <h3 style="text-align:center; color:#667eea; margin-bottom:15px;">Bảng tham chiếu nhanh</h3>
+                            <div class="table-responsive">
+                                <table style="width:100%; font-size:1em;">
+                                    <thead style="background:#667eea; color:white;">
+                                        <tr><th>%</th><th>Raw</th><th>Giá trị thực</th></tr>
+                                    </thead>
+                                    <tbody style="text-align:center; background:#f8f9ff;">
+                                        <tr><td>0%</td>   <td id="v0">-</td>   <td id="eu0">-</td></tr>
+                                        <tr><td>25%</td>  <td id="v25">-</td>  <td id="eu25">-</td></tr>
+                                        <tr><td>50%</td>  <td id="v50">-</td>  <td id="eu50">-</td></tr>
+                                        <tr><td>75%</td>  <td id="v75">-</td>  <td id="eu75">-</td></tr>
+                                        <tr><td>100%</td> <td id="v100">-</td> <td id="eu100">-</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 <!-- SECTION 3: GIỚI THIỆU (MỚI) -->
         <div id="about" class="section">
             <div class="header">
@@ -1230,20 +1299,23 @@
     </div>
     <script>
         // ===== NAVIGATION =====
-               function showSection(sectionId) {
+        function showSection(sectionId) {
+            // Ẩn tất cả section
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
             });
+            // Bỏ active cho tất cả nút
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.classList.remove('active');
             });
            
+            // Hiện section được chọn
             document.getElementById(sectionId).classList.add('active');
             event.target.classList.add('active');
            
-            // Ẩn footer khi vào trang Giới Thiệu
+            // ẨN FOOTER KHI VÀO PHẦN PLC HOẶC GIỚI THIỆU
             const footer = document.getElementById('mainFooter');
-            if (sectionId === 'about') {
+            if (sectionId === 'plc' || sectionId === 'about') {
                 footer.style.display = 'none';
             } else {
                 footer.style.display = 'block';
@@ -2086,7 +2158,60 @@ function calculateMotor() {
         // Load data on page load
         loadInputsFromLocalStorage();
     </script>
+	    <script>
+    // ANALOG SCALING CALCULATOR - PHIÊN BẢN SIÊU GỌN & ĐẸP
+    function calculateAll() {
+        const rawMin = parseFloat(document.getElementById('rawMin').value) || 0;
+        const rawMax = parseFloat(document.getElementById('rawMax').value) || 27648;
+        const euMin  = parseFloat(document.getElementById('euMin').value) || 0;
+        const euMax  = parseFloat(document.getElementById('euMax').value) || 100;
+        const unit   = document.getElementById('calcUnit').value || '';
+
+        const inputRaw = parseFloat(document.getElementById('inputRaw').value);
+        const inputEU  = parseFloat(document.getElementById('inputEU').value);
+
+        // Raw → EU
+        if (!isNaN(inputRaw)) {
+            let eu = euMin + (inputRaw - rawMin) * (euMax - euMin) / (rawMax - rawMin);
+            eu = Math.max(euMin, Math.min(euMax, eu));
+            document.getElementById('resultEU').textContent = eu.toFixed(3) + ' ' + unit;
+        } else {
+            document.getElementById('resultEU').textContent = '-';
+        }
+
+        // EU → Raw
+        if (!isNaN(inputEU)) {
+            let raw = rawMin + (inputEU - euMin) * (rawMax - rawMin) / (euMax - euMin);
+            raw = Math.max(rawMin, Math.min(rawMax, Math.round(raw)));
+            document.getElementById('resultRaw').textContent = raw;
+        } else {
+            document.getElementById('resultRaw').textContent = '-';
+        }
+
+        // Bảng nhanh
+        [0,25,50,75,100].forEach(p => {
+            const raw = rawMin + (rawMax - rawMin) * p / 100;
+            const eu  = euMin  + (euMax  - euMin)  * p / 100;
+            document.getElementById('v'+p).textContent = Math.round(raw);
+            document.getElementById('eu'+p).textContent = eu.toFixed(2) + ' ' + unit;
+        });
+    }
+
+    function setPreset(minRaw, maxRaw, minEU, maxEU, unit) {
+        document.getElementById('rawMin').value = minRaw;
+        document.getElementById('rawMax').value = maxRaw;
+        document.getElementById('euMin').value = minEU;
+        document.getElementById('euMax').value = maxEU;
+        document.getElementById('calcUnit').value = unit;
+        calculateAll();
+    }
+
+    ['rawMin','rawMax','euMin','euMax','calcUnit','inputRaw','inputEU'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', calculateAll);
+    });
+
+    calculateAll(); // Khởi động
+</script>
 </body>
 </html>
-
-
