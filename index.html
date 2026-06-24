@@ -865,6 +865,9 @@
                 <button class="tab-btn" onclick="switchTab('motor')">
                     🏭 Động Cơ
                 </button>
+                <button class="tab-btn" onclick="switchTab('cable-sizing')">
+                    🔌 Chọn Tiết Diện Cáp
+                </button>
             </div>
 
             <div id="voltage-drop" class="tab-content active">
@@ -1087,6 +1090,119 @@
                     <div id="motor-result" class="result-section hidden">
                         <div class="result-title">📊 Kết Quả Tính Toán</div>
                         <div id="motor-results-container"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="cable-sizing" class="tab-content">
+                <div class="card">
+                    <h2>🔌 Chọn Tiết Diện Cáp Theo Dòng Tải</h2>
+                    <p style="color:#666; margin-bottom:20px; font-style:italic;">Theo tiêu chuẩn IEC 60364-5-52 / TCVN 9207:2012</p>
+
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label>Loại mạng điện</label>
+                            <select id="cs-phase">
+                                <option value="1">1 Pha (2 lõi tải)</option>
+                                <option value="3" selected>3 Pha (3 lõi tải)</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Dòng điện tải (A)</label>
+                            <input type="number" id="cs-current" placeholder="Nhập dòng điện">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Hoặc nhập Công suất (kW)</label>
+                            <input type="number" id="cs-power" placeholder="Tự tính dòng từ kW">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Điện áp (V)</label>
+                            <input type="number" id="cs-voltage" value="380" placeholder="380">
+                            <div class="quick-select">
+                                <button class="quick-btn" onclick="setValue('cs-voltage', 220)">220V</button>
+                                <button class="quick-btn" onclick="setValue('cs-voltage', 380)">380V</button>
+                                <button class="quick-btn" onclick="setValue('cs-voltage', 400)">400V</button>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Hệ số công suất (cos φ)</label>
+                            <input type="number" id="cs-pf" value="0.85" step="0.01" min="0" max="1">
+                            <div class="quick-select">
+                                <button class="quick-btn" onclick="setValue('cs-pf', 0.8)">0.8</button>
+                                <button class="quick-btn" onclick="setValue('cs-pf', 0.85)">0.85</button>
+                                <button class="quick-btn" onclick="setValue('cs-pf', 0.9)">0.9</button>
+                                <button class="quick-btn" onclick="setValue('cs-pf', 1.0)">1.0</button>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Vật liệu dây dẫn</label>
+                            <select id="cs-material">
+                                <option value="Cu" selected>Đồng (Cu)</option>
+                                <option value="Al">Nhôm (Al)</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Loại cách điện</label>
+                            <select id="cs-insulation">
+                                <option value="PVC" selected>PVC (70°C)</option>
+                                <option value="XLPE">XLPE (90°C)</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Phương pháp lắp đặt</label>
+                            <select id="cs-method">
+                                <option value="B1">B1 - Trong ống trên tường</option>
+                                <option value="C">C - Cáp đi nổi trên tường</option>
+                                <option value="E" selected>E - Trên thang cáp / máng cáp</option>
+                                <option value="D1">D1 - Chôn trực tiếp trong đất</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Nhiệt độ môi trường (°C)</label>
+                            <input type="number" id="cs-temp" value="35" step="5">
+                            <div class="quick-select">
+                                <button class="quick-btn" onclick="setValue('cs-temp', 25)">25°C</button>
+                                <button class="quick-btn" onclick="setValue('cs-temp', 30)">30°C</button>
+                                <button class="quick-btn" onclick="setValue('cs-temp', 35)">35°C</button>
+                                <button class="quick-btn" onclick="setValue('cs-temp', 40)">40°C</button>
+                                <button class="quick-btn" onclick="setValue('cs-temp', 45)">45°C</button>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Số mạch đi chung (nhóm)</label>
+                            <select id="cs-group">
+                                <option value="1">1 mạch (không nhóm)</option>
+                                <option value="2">2 mạch</option>
+                                <option value="3">3 mạch</option>
+                                <option value="4">4 mạch</option>
+                                <option value="5">5 mạch</option>
+                                <option value="6">6 mạch</option>
+                                <option value="7">7 mạch</option>
+                                <option value="8">8 mạch</option>
+                                <option value="9">9 mạch</option>
+                                <option value="12">12 mạch</option>
+                                <option value="16">16 mạch</option>
+                                <option value="20">20 mạch</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="calc-btn" onclick="calculateCableSize()">
+                        🔍 CHỌN TIẾT DIỆN CÁP
+                    </button>
+
+                    <div id="cs-result" class="result-section hidden">
+                        <div class="result-title">📊 Kết Quả Chọn Cáp</div>
+                        <div id="cs-results-container"></div>
                     </div>
                 </div>
             </div>
@@ -2141,6 +2257,296 @@ function calculateMotor() {
     document.getElementById('motor-results-container').innerHTML = resultHTML;
     document.getElementById('motor-result').classList.remove('hidden');
 }
+
+        // ===== CABLE SIZING CALCULATOR =====
+        // Bảng dòng cho phép (Ampacity) theo IEC 60364-5-52
+        // Cấu trúc: ampacityTable[vật_liệu][cách_điện][phương_pháp][số_lõi_tải] = {tiết_diện: dòng_A}
+        const ampacityTable = {
+            'Cu': {
+                'PVC': {
+                    'B1': {
+                        '2L': {1.5:17.5, 2.5:24, 4:32, 6:41, 10:57, 16:76, 25:101, 35:125, 50:151, 70:192, 95:232, 120:269, 150:309, 185:353, 240:415, 300:477},
+                        '3L': {1.5:15.5, 2.5:21, 4:28, 6:36, 10:50, 16:68, 25:89, 35:110, 50:134, 70:171, 95:207, 120:239, 150:275, 185:314, 240:370, 300:426}
+                    },
+                    'C': {
+                        '2L': {1.5:19.5, 2.5:27, 4:36, 6:46, 10:63, 16:85, 25:112, 35:138, 50:168, 70:213, 95:258, 120:299, 150:344, 185:392, 240:461, 300:530},
+                        '3L': {1.5:17.5, 2.5:24, 4:32, 6:41, 10:57, 16:76, 25:96, 35:119, 50:144, 70:184, 95:223, 120:259, 150:299, 185:341, 240:403, 300:464}
+                    },
+                    'E': {
+                        '2L': {1.5:22, 2.5:30, 4:40, 6:51, 10:70, 16:94, 25:119, 35:148, 50:180, 70:232, 95:282, 120:328, 150:379, 185:434, 240:514, 300:593},
+                        '3L': {1.5:18.5, 2.5:25, 4:34, 6:43, 10:60, 16:80, 25:101, 35:126, 50:153, 70:196, 95:238, 120:276, 150:319, 185:364, 240:430, 300:497}
+                    },
+                    'D1': {
+                        '2L': {1.5:26, 2.5:34, 4:44, 6:56, 10:73, 16:95, 25:121, 35:146, 50:173, 70:213, 95:252, 120:287, 150:324, 185:363, 240:419, 300:474},
+                        '3L': {1.5:22, 2.5:29, 4:37, 6:46, 10:63, 16:81, 25:104, 35:125, 50:148, 70:183, 95:216, 120:246, 150:278, 185:312, 240:361, 300:408}
+                    }
+                },
+                'XLPE': {
+                    'B1': {
+                        '2L': {1.5:23, 2.5:31, 4:42, 6:54, 10:75, 16:100, 25:127, 35:158, 50:192, 70:246, 95:298, 120:346, 150:395, 185:450, 240:538, 300:621},
+                        '3L': {1.5:20, 2.5:28, 4:37, 6:48, 10:66, 16:88, 25:114, 35:141, 50:172, 70:219, 95:265, 120:306, 150:351, 185:401, 240:472, 300:545}
+                    },
+                    'C': {
+                        '2L': {1.5:24, 2.5:33, 4:45, 6:58, 10:80, 16:107, 25:138, 35:171, 50:209, 70:269, 95:328, 120:382, 150:441, 185:506, 240:599, 300:693},
+                        '3L': {1.5:22, 2.5:30, 4:40, 6:52, 10:71, 16:96, 25:119, 35:147, 50:179, 70:229, 95:278, 120:322, 150:371, 185:424, 240:500, 300:576}
+                    },
+                    'E': {
+                        '2L': {1.5:26, 2.5:36, 4:49, 6:63, 10:86, 16:115, 25:149, 35:185, 50:225, 70:289, 95:352, 120:410, 150:473, 185:542, 240:641, 300:741},
+                        '3L': {1.5:23, 2.5:32, 4:42, 6:54, 10:75, 16:100, 25:127, 35:158, 50:192, 70:246, 95:298, 120:346, 150:399, 185:456, 240:538, 300:621}
+                    },
+                    'D1': {
+                        '2L': {1.5:30, 2.5:40, 4:51, 6:65, 10:86, 16:110, 25:140, 35:170, 50:200, 70:245, 95:290, 120:330, 150:375, 185:420, 240:485, 300:550},
+                        '3L': {1.5:27, 2.5:35, 4:45, 6:57, 10:76, 16:97, 25:125, 35:150, 50:177, 70:218, 95:258, 120:295, 150:335, 185:375, 240:434, 300:492}
+                    }
+                }
+            },
+            'Al': {
+                'PVC': {
+                    'B1': {
+                        '2L': {2.5:18.5, 4:25, 6:32, 10:44, 16:59, 25:78, 35:96, 50:117, 70:149, 95:180, 120:208, 150:240, 185:274, 240:321, 300:369},
+                        '3L': {2.5:16.5, 4:22, 6:28, 10:39, 16:53, 25:70, 35:86, 50:104, 70:133, 95:161, 120:186, 150:215, 185:245, 240:286, 300:328}
+                    },
+                    'C': {
+                        '2L': {2.5:21, 4:28, 6:36, 10:49, 16:66, 25:83, 35:103, 50:125, 70:160, 95:195, 120:226, 150:261, 185:298, 240:352, 300:406},
+                        '3L': {2.5:18.5, 4:25, 6:32, 10:44, 16:59, 25:75, 35:92, 50:112, 70:142, 95:173, 120:201, 150:232, 185:265, 240:313, 300:360}
+                    },
+                    'E': {
+                        '2L': {2.5:23, 4:31, 6:39, 10:54, 16:73, 25:90, 35:112, 50:136, 70:174, 95:211, 120:245, 150:283, 185:323, 240:382, 300:440},
+                        '3L': {2.5:19.5, 4:26, 6:33, 10:46, 16:61, 25:78, 35:96, 50:117, 70:150, 95:183, 120:212, 150:245, 185:280, 240:330, 300:381}
+                    },
+                    'D1': {
+                        '2L': {2.5:26, 4:34, 6:42, 10:57, 16:74, 25:94, 35:114, 50:134, 70:167, 95:197, 120:224, 150:254, 185:285, 240:328, 300:371},
+                        '3L': {2.5:22, 4:29, 6:36, 10:49, 16:63, 25:81, 35:98, 50:116, 70:143, 95:169, 120:192, 150:217, 185:244, 240:282, 300:319}
+                    }
+                },
+                'XLPE': {
+                    'B1': {
+                        '2L': {2.5:24, 4:32, 6:42, 10:58, 16:77, 25:98, 35:122, 50:149, 70:191, 95:230, 120:268, 150:306, 185:350, 240:417, 300:481},
+                        '3L': {2.5:21.5, 4:29, 6:37, 10:52, 16:69, 25:89, 35:109, 50:133, 70:171, 95:207, 120:239, 150:275, 185:314, 240:370, 300:426}
+                    },
+                    'C': {
+                        '2L': {2.5:26, 4:35, 6:45, 10:62, 16:84, 25:101, 35:126, 50:154, 70:198, 95:241, 120:280, 150:324, 185:371, 240:439, 300:508},
+                        '3L': {2.5:23, 4:31, 6:40, 10:55, 16:74, 25:92, 35:113, 50:138, 70:177, 95:215, 120:249, 150:288, 185:328, 240:388, 300:447}
+                    },
+                    'E': {
+                        '2L': {2.5:28, 4:38, 6:49, 10:67, 16:91, 25:108, 35:135, 50:164, 70:211, 95:257, 120:300, 150:346, 185:397, 240:470, 300:543},
+                        '3L': {2.5:25, 4:33, 6:43, 10:59, 16:79, 25:98, 35:122, 50:149, 70:192, 95:232, 120:269, 150:309, 185:353, 240:415, 300:481}
+                    },
+                    'D1': {
+                        '2L': {2.5:31, 4:40, 6:51, 10:67, 16:87, 25:110, 35:133, 50:157, 70:193, 95:227, 120:260, 150:294, 185:330, 240:381, 300:432},
+                        '3L': {2.5:27, 4:35, 6:44, 10:59, 16:76, 25:98, 35:118, 50:139, 70:171, 95:203, 120:232, 150:263, 185:295, 240:341, 300:387}
+                    }
+                }
+            }
+        };
+
+        // Hệ số hiệu chỉnh nhiệt độ (Table B.52.10)
+        // Nhiệt độ tham chiếu: 30°C (trên không), 20°C (chôn đất)
+        const tempCorrectionFactors = {
+            'PVC': { // Ref 30°C
+                'air':  {10:1.22, 15:1.17, 20:1.12, 25:1.06, 30:1.00, 35:0.94, 40:0.87, 45:0.79, 50:0.71, 55:0.61, 60:0.50},
+                'ground': {10:1.10, 15:1.05, 20:1.00, 25:0.95, 30:0.89, 35:0.84, 40:0.77, 45:0.71, 50:0.63, 55:0.55, 60:0.45}
+            },
+            'XLPE': { // Ref 30°C
+                'air':  {10:1.15, 15:1.12, 20:1.08, 25:1.04, 30:1.00, 35:0.96, 40:0.91, 45:0.87, 50:0.82, 55:0.76, 60:0.71},
+                'ground': {10:1.07, 15:1.04, 20:1.00, 25:0.96, 30:0.93, 35:0.89, 40:0.85, 45:0.80, 50:0.76, 55:0.71, 60:0.65}
+            }
+        };
+
+        // Hệ số hiệu chỉnh nhóm (Table B.52.17)
+        const groupCorrectionFactors = {
+            1: 1.00, 2: 0.80, 3: 0.70, 4: 0.65, 5: 0.60,
+            6: 0.57, 7: 0.54, 8: 0.52, 9: 0.50,
+            12: 0.45, 16: 0.41, 20: 0.38
+        };
+
+        function getTempCorrectionFactor(insulation, method, temp) {
+            const env = (method === 'D1') ? 'ground' : 'air';
+            const factors = tempCorrectionFactors[insulation][env];
+            // Nội suy tuyến tính nếu nhiệt độ không có sẵn trong bảng
+            const temps = Object.keys(factors).map(Number).sort((a, b) => a - b);
+            if (temp <= temps[0]) return factors[temps[0]];
+            if (temp >= temps[temps.length - 1]) return factors[temps[temps.length - 1]];
+            for (let i = 0; i < temps.length - 1; i++) {
+                if (temp >= temps[i] && temp <= temps[i + 1]) {
+                    const t1 = temps[i], t2 = temps[i + 1];
+                    const f1 = factors[t1], f2 = factors[t2];
+                    return f1 + (f2 - f1) * (temp - t1) / (t2 - t1);
+                }
+            }
+            return 1.0;
+        }
+
+        function calculateCableSize() {
+            const phase = parseInt(document.getElementById('cs-phase').value);
+            let current = getVal('cs-current');
+            const power = getVal('cs-power');
+            const voltage = getVal('cs-voltage');
+            const pf = getVal('cs-pf');
+            const material = document.getElementById('cs-material').value;
+            const insulation = document.getElementById('cs-insulation').value;
+            const method = document.getElementById('cs-method').value;
+            const temp = getVal('cs-temp') || 30;
+            const groupCount = parseInt(document.getElementById('cs-group').value);
+
+            // Tính dòng từ công suất nếu không nhập dòng
+            if (!current && power && voltage && pf) {
+                if (phase === 3) {
+                    current = (power * 1000) / (Math.sqrt(3) * voltage * pf);
+                } else {
+                    current = (power * 1000) / (voltage * pf);
+                }
+            }
+
+            if (!current || current <= 0) {
+                alert('Vui lòng nhập dòng điện tải hoặc công suất + điện áp + cosφ!');
+                return;
+            }
+
+            // Lấy hệ số hiệu chỉnh
+            const kt = getTempCorrectionFactor(insulation, method, temp);
+            const kg = groupCorrectionFactors[groupCount] || 1.0;
+
+            // Dòng thiết kế (sau hiệu chỉnh)
+            const designCurrent = current / (kt * kg);
+
+            // Tra bảng ampacity
+            const loadedCores = (phase === 3) ? '3L' : '2L';
+            const table = ampacityTable[material]?.[insulation]?.[method]?.[loadedCores];
+
+            if (!table) {
+                alert('Không tìm thấy dữ liệu cho tổ hợp thông số này!');
+                return;
+            }
+
+            const sizes = Object.keys(table).map(Number).sort((a, b) => a - b);
+            let selectedSize = null;
+            let selectedAmpacity = null;
+
+            for (const size of sizes) {
+                if (table[size] >= designCurrent) {
+                    selectedSize = size;
+                    selectedAmpacity = table[size];
+                    break;
+                }
+            }
+
+            // Phương pháp lắp đặt tên tiếng Việt
+            const methodNames = {
+                'B1': 'B1 - Trong ống trên tường',
+                'C': 'C - Cáp đi nổi trên tường',
+                'E': 'E - Trên thang cáp / máng cáp',
+                'D1': 'D1 - Chôn trực tiếp trong đất'
+            };
+            const refTemp = (method === 'D1') ? '20°C' : '30°C';
+
+            // Tạo bảng ampacity đầy đủ
+            let ampacityTableHTML = '';
+            for (const size of sizes) {
+                const baseAmp = table[size];
+                const correctedAmp = baseAmp * kt * kg;
+                const isSelected = (size === selectedSize);
+                ampacityTableHTML += `
+                    <tr style="${isSelected ? 'background:#c8e6c9; font-weight:bold;' : ''}">
+                        <td>${size} mm²</td>
+                        <td>${baseAmp} A</td>
+                        <td>${correctedAmp.toFixed(1)} A</td>
+                        <td>${isSelected ? '✅ Được chọn' : (correctedAmp >= current ? '✔️ Đạt' : '❌ Không đạt')}</td>
+                    </tr>`;
+            }
+
+            let resultHTML;
+            if (!selectedSize) {
+                resultHTML = `
+                    <div class="warning">
+                        <strong>⚠️ Cảnh báo:</strong> Dòng điện tải ${current.toFixed(1)}A (thiết kế: ${designCurrent.toFixed(1)}A) vượt quá khả năng tải của tất cả tiết diện trong bảng tra!<br>
+                        Vui lòng xem xét dùng nhiều sợi song song hoặc thay đổi phương pháp lắp đặt.
+                    </div>`;
+            } else {
+                const correctedAmpacity = selectedAmpacity * kt * kg;
+                const margin = ((correctedAmpacity - current) / current * 100).toFixed(1);
+
+                resultHTML = `
+                    <div class="success" style="margin-bottom:20px; font-size:1.1em;">
+                        <strong>✅ Tiết diện cáp đề xuất: <span style="font-size:1.5em; color:#1976d2;">${selectedSize} mm²</span></strong><br>
+                        ${material === 'Cu' ? 'Đồng' : 'Nhôm'} / ${insulation} / ${phase === 3 ? '3 pha' : '1 pha'}
+                    </div>
+
+                    <div class="grid-2col">
+                        <div>
+                            <div class="result-title">⚡ Thông Số Dòng Điện</div>
+                            <div class="result-item">
+                                <span class="result-label">Dòng tải thực tế:</span>
+                                <span class="result-value">${current.toFixed(2)} A</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Dòng thiết kế (sau hiệu chỉnh):</span>
+                                <span class="result-value">${designCurrent.toFixed(2)} A</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Dòng cho phép Iz (gốc):</span>
+                                <span class="result-value">${selectedAmpacity} A</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Dòng cho phép Iz (hiệu chỉnh):</span>
+                                <span class="result-value">${correctedAmpacity.toFixed(1)} A</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Dự phòng:</span>
+                                <span class="result-value" style="color:#28a745;">+${margin}%</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="result-title">🔧 Hệ Số Hiệu Chỉnh</div>
+                            <div class="result-item">
+                                <span class="result-label">Hệ số nhiệt độ Kt (${temp}°C, ref ${refTemp}):</span>
+                                <span class="result-value">${kt.toFixed(3)}</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Hệ số nhóm Kg (${groupCount} mạch):</span>
+                                <span class="result-value">${kg.toFixed(2)}</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Tổng hệ số Kt × Kg:</span>
+                                <span class="result-value">${(kt * kg).toFixed(3)}</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Phương pháp lắp đặt:</span>
+                                <span class="result-value">${methodNames[method]}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-title" style="margin-top:25px;">📊 Bảng Tra Dòng Cho Phép (${material} / ${insulation} / ${methodNames[method]} / ${phase === 3 ? '3 lõi tải' : '2 lõi tải'})</div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tiết diện</th>
+                                    <th>Iz gốc (ref ${refTemp})</th>
+                                    <th>Iz hiệu chỉnh (${temp}°C, ${groupCount} mạch)</th>
+                                    <th>Đánh giá</th>
+                                </tr>
+                            </thead>
+                            <tbody>${ampacityTableHTML}</tbody>
+                        </table>
+                    </div>
+
+                    <div class="formula-box" style="margin-top:20px;">
+                        <strong>Công thức (IEC 60364-5-52):</strong><br>
+                        I<sub>z,hiệu chỉnh</sub> = I<sub>z,gốc</sub> × K<sub>t</sub> × K<sub>g</sub><br>
+                        I<sub>thiết kế</sub> = I<sub>tải</sub> / (K<sub>t</sub> × K<sub>g</sub>)<br>
+                        Điều kiện chọn: I<sub>z,gốc</sub> ≥ I<sub>thiết kế</sub><br>
+                        <br>
+                        <strong>Trong đó:</strong><br>
+                        K<sub>t</sub> = Hệ số hiệu chỉnh nhiệt độ (Table B.52.10)<br>
+                        K<sub>g</sub> = Hệ số hiệu chỉnh nhóm (Table B.52.17)
+                    </div>`;
+            }
+
+            document.getElementById('cs-results-container').innerHTML = resultHTML;
+            document.getElementById('cs-result').classList.remove('hidden');
+        }
 
         // Load data on page load
         loadInputsFromLocalStorage();
