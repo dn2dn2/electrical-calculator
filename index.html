@@ -1194,6 +1194,18 @@
                                 <option value="20">20 mạch</option>
                             </select>
                         </div>
+
+                        <div class="input-group">
+                            <label>Chiều dài dây dẫn (m)</label>
+                            <input type="number" id="cs-length" placeholder="Nhập chiều dài">
+                            <div class="quick-select">
+                                <button class="quick-btn" onclick="setValue('cs-length', 20)">20m</button>
+                                <button class="quick-btn" onclick="setValue('cs-length', 50)">50m</button>
+                                <button class="quick-btn" onclick="setValue('cs-length', 100)">100m</button>
+                                <button class="quick-btn" onclick="setValue('cs-length', 200)">200m</button>
+                                <button class="quick-btn" onclick="setValue('cs-length', 500)">500m</button>
+                            </div>
+                        </div>
                     </div>
 
                     <button class="calc-btn" onclick="calculateCableSize()">
@@ -2536,12 +2548,87 @@ function calculateMotor() {
                         <strong>Công thức (IEC 60364-5-52):</strong><br>
                         I<sub>z,hiệu chỉnh</sub> = I<sub>z,gốc</sub> × K<sub>t</sub> × K<sub>g</sub><br>
                         I<sub>thiết kế</sub> = I<sub>tải</sub> / (K<sub>t</sub> × K<sub>g</sub>)<br>
-                        Điều kiện chọn: I<sub>z,gốc</sub> ≥ I<sub>thiết kế</sub><br>
-                        <br>
-                        <strong>Trong đó:</strong><br>
-                        K<sub>t</sub> = Hệ số hiệu chỉnh nhiệt độ (Table B.52.10)<br>
-                        K<sub>g</sub> = Hệ số hiệu chỉnh nhóm (Table B.52.17)
+                        Điều kiện chọn: I<sub>z,gốc</sub> ≥ I<sub>thiết kế</sub>
                     </div>`;
+
+                // === TÍNH SỤT ÁP NẾU CÓ NHẬP CHIỀU DÀI ===
+                const cableLength = getVal('cs-length');
+                if (cableLength && cableLength > 0) {
+                    const resistivity = (material === 'Cu') ? 0.0175 : 0.0283;
+                    const cableR = (resistivity * cableLength) / selectedSize;
+                    let vDrop;
+                    if (phase === 3) {
+                        vDrop = Math.sqrt(3) * current * cableR;
+                    } else {
+                        vDrop = 2 * current * cableR;
+                    }
+                    const vDropPercent = (vDrop / voltage) * 100;
+                    const vAtLoad = voltage - vDrop;
+
+                    let vdAssessment, vdClass;
+                    if (vDropPercent <= 3) {
+                        vdAssessment = '✅ Đạt tiêu chuẩn! Tổn thất điện áp ≤ 3%';
+                        vdClass = 'success';
+                    } else if (vDropPercent <= 5) {
+                        vdAssessment = '⚠️ Chấp nhận được nhưng nên cải thiện (3-5%)';
+                        vdClass = 'warning';
+                    } else {
+                        vdAssessment = '❌ Không đạt! Cần tăng tiết diện hoặc giảm chiều dài';
+                        vdClass = 'warning';
+                    }
+
+                    // Tìm tiết diện tối thiểu đạt được ≤ 3% sụt áp
+                    let suggestedSizeVD = selectedSize;
+                    if (vDropPercent > 3) {
+                        for (const sz of sizes) {
+                            if (sz < selectedSize) continue;
+                            const rTest = (resistivity * cableLength) / sz;
+                            let vdTest;
+                            if (phase === 3) {
+                                vdTest = Math.sqrt(3) * current * rTest;
+                            } else {
+                                vdTest = 2 * current * rTest;
+                            }
+                            const vdpTest = (vdTest / voltage) * 100;
+                            if (vdpTest <= 3) {
+                                suggestedSizeVD = sz;
+                                break;
+                            }
+                            suggestedSizeVD = sz; // lấy size lớn nhất nếu không đạt
+                        }
+                    }
+
+                    // Tiết diện cuối cùng = lấy giá trị lớn nhất giữa ampacity và sụt áp
+                    const finalSize = Math.max(selectedSize, suggestedSizeVD);
+                    const finalNote = (finalSize > selectedSize) 
+                        ? `<div class="warning" style="margin-top:15px;"><strong>⚠️ Lưu ý:</strong> Tiết diện ${selectedSize} mm² đạt ampacity nhưng <strong>không đạt sụt áp</strong>. Nên tăng lên <strong>${finalSize} mm²</strong> để đạt cả 2 tiêu chí.</div>`
+                        : '';
+
+                    resultHTML += `
+                    <div class="result-title" style="margin-top:25px;">📉 Kiểm Tra Sụt Áp (Chiều dài: ${cableLength}m)</div>
+                    <div class="result-item">
+                        <span class="result-label">Điện trở dây dẫn (${selectedSize} mm², ${cableLength}m):</span>
+                        <span class="result-value">${cableR.toFixed(4)} Ω</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Tổn thất điện áp:</span>
+                        <span class="result-value">${vDrop.toFixed(2)} V (${vDropPercent.toFixed(2)}%)</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Điện áp tại tải:</span>
+                        <span class="result-value">${vAtLoad.toFixed(2)} V</span>
+                    </div>
+                    <div class="${vdClass}">
+                        <strong>Đánh giá sụt áp:</strong> ${vdAssessment}
+                    </div>
+                    ${finalNote}
+                    <div class="formula-box" style="margin-top:15px;">
+                        <strong>Công thức sụt áp:</strong><br>
+                        R = ρ × L / A = ${resistivity} × ${cableLength} / ${selectedSize} = ${cableR.toFixed(4)} Ω<br>
+                        ${phase === 3 ? 'ΔV = √3 × I × R (3 pha)' : 'ΔV = 2 × I × R (1 pha)'}<br>
+                        ΔV% = (ΔV / V) × 100%
+                    </div>`;
+                }
             }
 
             document.getElementById('cs-results-container').innerHTML = resultHTML;
